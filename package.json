@@ -4,8 +4,22 @@
   "description": "API for URLshorty",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=dev node server.js",
+    "prod": "NODE_ENV=prod node server.js",
+    "test": "NODE_ENV=test mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/URLshorty/api.git"
   },
   "author": "Russell Tepper",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.1",
+    "pug": "^2.0.0-beta11"
+  },
+  "devDependencies": {
+    "expect": "^1.20.2",
+    "mocha": "^3.2.0"
+  }
 }
