@@ -6,7 +6,8 @@
   "scripts": {
     "start": "NODE_ENV=dev node server.js",
     "prod": "NODE_ENV=prod node server.js",
-    "test": "NODE_ENV=test mocha"
+    "test": "NODE_ENV=test mocha",
+    "setupEnv": "node config/setup.js"
   },
   "repository": {
     "type": "git",
@@ -15,9 +16,13 @@
   "author": "Russell Tepper",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
+    "db-migrate": "^0.10.0-beta.20",
+    "db-migrate-pg": "^0.1.11",
+    "dotenv": "^4.0.0",
     "express": "^4.14.1",
-    "pug": "^2.0.0-beta11"
+    "pg-promise": "^5.6.3"
   },
   "devDependencies": {
     "expect": "^1.20.2",

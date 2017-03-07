@@ -1,0 +1,3 @@
+// dev environmental variables using dotenv
+
+DATABASE_URL=dburl...

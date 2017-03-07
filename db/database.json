@@ -1,0 +1,24 @@
+// i think this will be skipped by DAABASE URL BEING SET IN .ENV
+
+{
+  "defaultEnv": {"ENV": "NODE_ENV"},
+  "dev": {
+    "driver": "pg",
+    "user": {"ENV": "DATABASE_USERNAME"},
+    "password": {"ENV": "DATABASE_PASSWORD"},
+    "host": "localhost",
+    "database": "mydb",
+    "schema": "my_schema"
+  },
+
+  "prod": {
+    "driver": "pg",
+    "user": {"ENV": "DATABASE_USERNAME"},
+    "password": {"ENV": "DATABASE_PASSWORD"},
+    "host": {"ENV": "DATABASE_URL"},
+    "database": "mydb",
+    "schema": "my_schema"
+  },
+
+  "other": "postgres://username:password@host/database"
+}
