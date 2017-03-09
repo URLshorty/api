@@ -18,7 +18,7 @@ const router = express.Router()
 
 router.get('/topvisitedurls', db.getTopVisitedURLs)
 router.get('/toprequestedurls', db.getTopRequestedURLs)
-// router.post('/urls', db.createURL)
+router.post('/urls', db.createURL)
 
 // router.post('/users...', new user)
 // router.put('/user/:id...', update user)
