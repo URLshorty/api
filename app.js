@@ -5,31 +5,31 @@ const app = express()
 const router = express.Router()
 const bodyParser = require('body-parser')
 
-// initialize knex
+// initialize knex connection
 const Knex = require('knex')
 const knexConfig = require('./knexfile')
-const Model = require('objection').Model
 const knex = Knex(knexConfig.development)
+
 // Bind all Models to a knex instance.
 // For multi database systems, see the Model.bindKnex method.
+const Model = require('objection').Model
 Model.knex(knex)
 
 // models
-const Url = require('./models/Url')
+// const Url = require('./models/Url')
 
 // config bodyParser() for gathering POST data
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-
 // port & router
 const port = process.env.PORT || 3000
 
 // do logger and cookieParser()?
 
 router.get('/', function (req, res) {
-  let test = Url.query()
-              .this((x)=> console.log(x))
-  console.log(test)
+  // let test = Url.query()
+  //             .this((x)=> console.log(x))
+  // console.log(test)
   res.send('check check 1 2')
 })
 
