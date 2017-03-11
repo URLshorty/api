@@ -1,9 +1,11 @@
+require('path')
 const Model = require('objection').Model;
 
-export default class User extends Model {
+// why can't I use 'export default class...' here
+class User extends Model {
   // Table name like this is the only required property.
   static get tableName() {
-    return 'User';
+    return 'users';
   }
 
   // This is not the database schema! Nothing is This is only used for
@@ -28,7 +30,7 @@ export default class User extends Model {
   static get relationMappings() {
     return {
       Urls: {
-        relation: Model.ManyToManyRelation,
+        relation: Model.HasManyRelation,
         modelClass: `${__dirname}/User_Url`,
         through: {
           from: 'User_Url.user_id',
@@ -38,7 +40,7 @@ export default class User extends Model {
       },
 
       users: {
-        relation: Model.HasOneRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/Url`,
         join: {
           from: 'User.most_visited_url_id',
@@ -49,3 +51,5 @@ export default class User extends Model {
   }
 
 }
+
+module.exports = User

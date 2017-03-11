@@ -23,15 +23,20 @@ const User_Url = require('./models/User_Url')
 // config bodyParser() for gathering POST data
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+
 // port & router
 const port = process.env.PORT || 3000
 
 // do logger and cookieParser()?
 
-        let test = Url.query()
-                    .then( (x)=> console.log(x[0])  )
+        let test = Url
+                    .query()
+                    .insert({original: 'asdfsadfasd'})
+                    .then(function (x) {
+                        console.log(x)
+                    })
                     .catch(function (err) {
-                      console.log('ERROR!');
+                      console.log(err);
                     });
 
 router.get('/', function (req, res) {

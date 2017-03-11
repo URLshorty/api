@@ -1,9 +1,9 @@
 const Model = require('objection').Model;
 
-export default class User_Url extends Model {
+class User_Url extends Model {
   // Table name like this is the only required property.
   static get tableName() {
-    return 'User_Url';
+    return 'user_urls';
   }
 
   // This is not the database schema! Nothing is This is only used for
@@ -28,7 +28,7 @@ export default class User_Url extends Model {
   static get relationMappings() {
     return {
       users: {
-        relation: Model.HasOneRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/User`,
         join: {
           from: 'User_Url.user_id',
@@ -37,7 +37,7 @@ export default class User_Url extends Model {
       },
 
       urls: {
-        relation: Model.HasOneRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/Url`,
         join: {
           from: 'User_Url.url_id',
@@ -48,3 +48,5 @@ export default class User_Url extends Model {
   }
 
 }
+
+module.exports = User_Url
