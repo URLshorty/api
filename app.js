@@ -28,10 +28,13 @@ const port = process.env.PORT || 3000
 
 // do logger and cookieParser()?
 
+        let test = Url.query()
+                    .then( (x)=> console.log(x[0])  )
+                    .catch(function (err) {
+                      console.log('ERROR!');
+                    });
+
 router.get('/', function (req, res) {
-  // let test = Url.query()
-  //             .this((x)=> console.log(x))
-  // console.log(test)
   res.send('check check 1 2')
 })
 
