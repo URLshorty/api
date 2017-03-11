@@ -9,7 +9,7 @@ exports.up = function(knex, Promise) {
       table.string('password_digest')
       table.boolean('is_admin')
         .defaultTo(0)
-      table.foreign('most_visited_url_id')
+      table.integer('most_visited_url_id')
         .references('id')
         .inTable('urls')
       table.timestamps()
@@ -28,10 +28,10 @@ exports.up = function(knex, Promise) {
 
     knex.schema.createTableIfNotExists('user_urls', function(table){
       table.increments('id').primary()
-      table.foreign('user_id')
+      table.integer('user_id')
         .references('id')
         .inTable('users')
-      table.foreign('url_id')
+      table.integer('url_id')
        .references('id')
        .inTable('urls')
       table.timestamps()
