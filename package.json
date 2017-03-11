@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "nodemon app.js --exec babel-node --presets es2015,stage-2",
-    "setupEnv": "node config/setup.js"
+    "setupEnv": "node config/setup.js",
+    "c": "node consoleREPL.js"
   },
   "repository": {
     "type": "git",

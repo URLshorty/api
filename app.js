@@ -16,7 +16,9 @@ const Model = require('objection').Model
 Model.knex(knex)
 
 // models
-// const Url = require('./models/Url')
+const Url = require('./models/Url')
+const User = require('./models/User')
+const User_Url = require('./models/User_Url')
 
 // config bodyParser() for gathering POST data
 app.use(bodyParser.urlencoded({ extended: true }))
