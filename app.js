@@ -29,15 +29,15 @@ const port = process.env.PORT || 3000
 
 // do logger and cookieParser()?
 
-        // let test = Url
-        //             .query()
-        //             .insert({original: 'fourth test'})
-        //             .then(function (x) {
-        //                 console.log(x)
-        //             })
-        //             .catch(function (err) {
-        //               console.log(err);
-        //             });
+        let test = Url
+                    .query()
+                    .insert({original: 'another test'})
+                    .then(function (x) {
+                        console.log(x)
+                    })
+                    .catch(function (err) {
+                      console.log(err);
+                    });
 
 router.get('/', function (req, res) {
   res.send('check check 1 2')

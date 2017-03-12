@@ -14,12 +14,12 @@ class User extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['username', 'email', 'passwordDigest'],
+      required: ['username', 'email', 'password_digest'],
       properties: {
         id: {type: 'integer'},
         username: {type: 'string', minLength: 1, maxLength: 50},
         email: {type: 'string', minLength: 1, maxLength: 80},
-        password_digest: {type: 'integer'},
+        password_digest: {type: 'string'},
         created_at: {type: 'string'},
         updated_at: {type: 'string'}
       }
@@ -32,7 +32,7 @@ class User extends Model {
       urls: {
         relation: Model.ManyToManyRelation,
         // model class of final destination table, not immediate join!
-        modelClass: `${__dirname}/urls`,
+        modelClass: `${__dirname}/Url`,
         join: {
           from: 'users.id',
           through: {
