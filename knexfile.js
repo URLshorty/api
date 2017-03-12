@@ -13,7 +13,7 @@ module.exports = {
 
   test: {
     client: 'pg',
-    connection: process.env.DATABASE_STRING,
+    connection: process.env.TEST_DATABASE_STRING,
     migrations: {
       tableName: 'knex_migrations'
     }

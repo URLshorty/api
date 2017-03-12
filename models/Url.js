@@ -1,9 +1,10 @@
 const Model = require('objection').Model
 
-// why can't I use 'export default class...' here
+// why doesn't export default class...' work here
 class Url extends Model {
-  // Table name like this is the only required property.
+  // Table name is the only required property.
   static get tableName() {
+    // name of table in db
     return 'urls';
   }
 
@@ -29,22 +30,25 @@ class Url extends Model {
   static get relationMappings() {
     return {
       users: {
-        relation: Model.HasManyRelation,
-        modelClass: `${__dirname}/User_Url`,
-        through: {
-          from: 'User_Url.url_id',
-          to: 'User_Url.user_id'
-        },
-        to: 'User.id'
+        relation: Model.ManyToManyRelation,
+        // model class of final destination table, not immediate join!
+        modelClass: `${__dirname}/User`,
+        join: {
+          from: 'urls.id',
+          through: {
+            from: 'user_urls.url_id',
+            to: 'user_urls.user_id'
+          },
+          to: 'users.id'
+        }
       },
 
-      users: {
-        /// CHECK THIS ASSOCIATION
+      user: {
         relation: Model.HasOneRelation,
         modelClass: `${__dirname}/User`,
         join: {
           from: 'urls.id',
-          to: 'User.most_visited_url_id'
+          to: 'users.most_visited_url_id'
         }
       }
     }

@@ -7,6 +7,7 @@
     "node": "6.2.0"
   },
   "scripts": {
+    "test": "mocha",
     "start": "nodemon app.js --exec babel-node --presets es2015,stage-2",
     "setupEnv": "node config/setup.js",
     "co": "node consoleREPL.js"

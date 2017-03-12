@@ -1,8 +1,10 @@
 const Model = require('objection').Model;
 
+// why doesn't export default class...' work here
 class User_Url extends Model {
-  // Table name like this is the only required property.
+  // Table name is the only required property.
   static get tableName() {
+    // name of table in db
     return 'user_urls';
   }
 
@@ -31,8 +33,8 @@ class User_Url extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/User`,
         join: {
-          from: 'User_Url.user_id',
-          to: 'User.Id'
+          from: 'user_urls.user_id',
+          to: 'users.id'
         }
       },
 
@@ -40,8 +42,8 @@ class User_Url extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/Url`,
         join: {
-          from: 'User_Url.url_id',
-          to: 'Url.Id'
+          from: 'user_urls.url_id',
+          to: 'urls.id'
         }
       }
     }
