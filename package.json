@@ -7,7 +7,7 @@
     "node": "6.2.0"
   },
   "scripts": {
-    "seed": "node db/seeds/masterObjectionSeeder.js",
+    "seed": "node db/seeds/masterObjectSeeder.js",
     "test": "mocha",
     "start": "nodemon app.js --exec babel-node --presets es2015,stage-2,babel-plugin-transform-async-functions,babel-plugin-transform-regenerator",
     "setupEnv": "node config/setup.js",

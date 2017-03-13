@@ -20,6 +20,7 @@ class User extends Model {
         username: {type: 'string', minLength: 1, maxLength: 50},
         email: {type: 'string', minLength: 1, maxLength: 80},
         password_digest: {type: 'string'},
+        most_visited_url_id: {type: 'integer'},
         created_at: {type: 'string'},
         updated_at: {type: 'string'}
       }
@@ -43,7 +44,7 @@ class User extends Model {
         }
       },
 
-      users: {
+      url: {
         relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/Url`,
         join: {
