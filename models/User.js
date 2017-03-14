@@ -1,7 +1,6 @@
-const Model = require('objection').Model;
+import { Model } from 'objection'
 
-// why doesn't export default class...' work here
-class User extends Model {
+export default class User extends Model {
   // Table name is the only required property.
   static get tableName() {
     // name of table in db
@@ -9,7 +8,7 @@ class User extends Model {
   }
 
   // This is not the database schema! Nothing is This is only used for
-  // validation. Whenever a model instance is created it is checked against 
+  // validation. Whenever a model instance is created it is checked against
   // this schema. http://json-schema.org/.
   static get jsonSchema() {
     return {
@@ -57,4 +56,3 @@ class User extends Model {
 
 }
 
-module.exports = User

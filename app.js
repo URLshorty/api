@@ -16,9 +16,11 @@ const Model = require('objection').Model
 Model.knex(knex)
 
 // models
-const Url = require('./models/Url')
-const User = require('./models/User')
-const User_Url = require('./models/User_Url')
+import {
+  Url,
+  User,
+  User_Url,
+} from './models'
 
 // config bodyParser() for gathering POST data
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -28,16 +30,21 @@ app.use(bodyParser.json())
 const port = process.env.PORT || 3000
 
 // do logger and cookieParser()?
+  async function t() {
 
-        let test = Url
+        let test = await Url
                     .query()
                     .insert({original: 'another test'})
                     .then(function (x) {
                         console.log(x)
+                        return x
                     })
                     .catch(function (err) {
                       console.log(err);
                     });
+  }
+
+  t()
 
 router.get('/', function (req, res) {
   res.send('check check 1 2')

@@ -1,4 +1,4 @@
-// run this to seed with Objection 
+// run this to seed with Objection
 // it uses await to no foreign key constraints
 // and sync order of db interactions
 
@@ -15,19 +15,21 @@
   Model.knex(knex)
 
   // models
-  const Url = require('../../models/Url')
-  const User = require('../../models/User')
-  const User_Url = require('../../models/User_Url')
+  import {
+    Url,
+    User,
+    User_Url,
+  } from '../../models'
 
 /////////////////////////////
 
 // es7's 'await' available through babel can replace the below
 // 'await' can only be inside asyncs/suspendables
-var async = require('asyncawait/async')
-var await = require('asyncawait/await')
+// var async = require('asyncawait/async')
+// var await = require('asyncawait/await')
 
 // clear all tables
-let clearData = async ( () => {
+let clearData = async () => {
 
   await (
     User_Url
@@ -53,211 +55,200 @@ let clearData = async ( () => {
       .catch( (er) => console.log(er) )
   )
 
-})
+}
 
 // set data
-let setData = async (() => {
+let setData = async () => {
 
     // clear data
-    await (
-      clearData()  
+    await
+      clearData()
         .then((d) => {
           console.log('data cleared')
         })
         .catch((er) => {
           `clear data error: ${console.log(er)}`
         })
-    )
 
     // add users
-    let jennifer = await (
+    let jennifer = await
       User
         .query()
         .insert({
-          id: 1, 
-          username: 'Jennifer', 
-          email: `jennifer@gmail.com`, 
+          id: 1,
+          username: 'Jennifer',
+          email: `jennifer@gmail.com`,
           password_digest: "a"
         })
         .then((newUser) => {
           console.log(`${newUser.username} created`)
-          return newUser 
+          return newUser
         })
         .catch((er) => {
-          console.log(`error creating new user: ${er}`) 
+          console.log(`error creating new user: ${er}`)
         })
-    )
 
-    let alex = await (
+    let alex = await
       User
         .query()
         .insert({
-          id: 2, 
-          username: 'Alex', 
-          email: `alex@gmail.com`, 
+          id: 2,
+          username: 'Alex',
+          email: `alex@gmail.com`,
           password_digest: "a"
         })
         .then((newUser) => {
           console.log(`${newUser.username} created`)
-          return newUser 
+          return newUser
         })
         .catch((er) => {
-          console.log(`error creating new user: ${er}`) 
+          console.log(`error creating new user: ${er}`)
         })
-    )
 
-    let rohan = await (
+    let rohan = await
       User
         .query()
         .insert({
-          id: 3, 
-          username: 'Rohan', 
-          email: `rohan@gmail.com`, 
+          id: 3,
+          username: 'Rohan',
+          email: `rohan@gmail.com`,
           password_digest: "a"
         })
         .then((newUser) => {
           console.log(`${newUser.username} created`)
-          return newUser 
+          return newUser
         })
         .catch((er) => {
-          console.log(`error creating new user: ${er}`) 
+          console.log(`error creating new user: ${er}`)
         })
-    )
 
-    let eric = await (
+    let eric = await
       User
         .query()
         .insert({
-          id: 4, 
-          username: 'Eric', 
-          email: `eric@gmail.com`, 
+          id: 4,
+          username: 'Eric',
+          email: `eric@gmail.com`,
           password_digest: "a"
         })
         .then((newUser) => {
           console.log(`${newUser.username} created`)
-          return newUser 
+          return newUser
         })
         .catch((er) => {
-          console.log(`error creating new user: ${er}`) 
+          console.log(`error creating new user: ${er}`)
         })
-    )
 
-    let beck = await (
+    let beck = await
       User
         .query()
         .insert({
-          id: 5, 
-          username: 'Beck', 
-          email: `beck@gmail.com`, 
+          id: 5,
+          username: 'Beck',
+          email: `beck@gmail.com`,
           password_digest: "a"
         })
         .then((newUser) => {
           console.log(`${newUser.username} created`)
-          return newUser 
+          return newUser
         })
         .catch((er) => {
-          console.log(`error creating new user: ${er}`) 
+          console.log(`error creating new user: ${er}`)
         })
-    )
 
   // users add urls
   let google = {}
-  await (
+  await
     jennifer
       .$relatedQuery('urls')
       .insert({
-        id: 1,  
-        original: "www.google.com", 
-        shortened: "g.com", 
-        requests: 222, 
+        id: 1,
+        original: "www.google.com",
+        shortened: "g.com",
+        requests: 222,
         visits: 800})
       .then((newUrl) => {
           console.log(`jennifer created ${newUrl.original}`)
-          google = newUrl 
+          google = newUrl
         })
         .catch((er) => {
-          console.log(`error creating new url: ${er}`) 
+          console.log(`error creating new url: ${er}`)
         })
-  )
 
   let yahoo = {}
-  await (
+  await
     alex
       .$relatedQuery('urls')
       .insert({
-        id: 2,  
-        original: "www.yahoo.com", 
-        shortened: "y.com", 
-        requests: 222, 
+        id: 2,
+        original: "www.yahoo.com",
+        shortened: "y.com",
+        requests: 222,
         visits: 800})
       .then((newUrl) => {
           console.log(`alex created ${newUrl.original}`)
-          yahoo = newUrl 
+          yahoo = newUrl
         })
         .catch((er) => {
-          console.log(`error creating new url: ${er}`) 
+          console.log(`error creating new url: ${er}`)
         })
-  )
 
   let bing = {}
-  await (
+  await
     rohan
       .$relatedQuery('urls')
       .insert({
-        id: 3,  
-        original: "www.bing.com", 
-        shortened: "b.com", 
-        requests: 222, 
+        id: 3,
+        original: "www.bing.com",
+        shortened: "b.com",
+        requests: 222,
         visits: 800})
       .then((newUrl) => {
           console.log(`rohan created ${newUrl.original}`)
-          bing = newUrl 
+          bing = newUrl
         })
         .catch((er) => {
-          console.log(`error creating new url: ${er}`) 
+          console.log(`error creating new url: ${er}`)
         })
-  )
 
   let reddit = {}
-  await (
+  await
     eric
       .$relatedQuery('urls')
       .insert({
-        id: 4,  
-        original: "www.reddit.com", 
-        shortened: "r.com", 
-        requests: 222, 
+        id: 4,
+        original: "www.reddit.com",
+        shortened: "r.com",
+        requests: 222,
         visits: 800})
       .then((newUrl) => {
           console.log(`eric created ${newUrl.original}`)
-          reddit = newUrl 
+          reddit = newUrl
         })
         .catch((er) => {
-          console.log(`error creating new url: ${er}`) 
+          console.log(`error creating new url: ${er}`)
         })
-  )
 
   let newyorker = {}
-  await (
+  await
     beck
       .$relatedQuery('urls')
       .insert({
         id: 5,
-        original: "www.newyorker.com", 
-        shortened: "nyer.com", 
-        requests: 222, 
+        original: "www.newyorker.com",
+        shortened: "nyer.com",
+        requests: 222,
         visits: 800})
       .then((newUrl) => {
           console.log(`beck created ${newUrl.original}`)
-          newyorker = newUrl 
+          newyorker = newUrl
         })
         .catch((er) => {
-          console.log(`error creating new url: ${er}`) 
+          console.log(`error creating new url: ${er}`)
         })
-  )
 
   // set users' 'most visited urls'
-  await (
+  await
     jennifer
       .$query()
       .patchAndFetch({
@@ -269,9 +260,8 @@ let setData = async (() => {
       .catch((er) => {
         console.log(er)
       })
-  )
 
-  await (
+  await
     alex
       .$query()
       .patchAndFetch({
@@ -283,9 +273,8 @@ let setData = async (() => {
       .catch((er) => {
         console.log(er)
       })
-  )
 
-  await (
+  await
     rohan
       .$query()
       .patchAndFetch({
@@ -297,9 +286,8 @@ let setData = async (() => {
       .catch((er) => {
         console.log(er)
       })
-  )
 
-  await (
+  await
     eric
       .$query()
       .patchAndFetch({
@@ -311,9 +299,8 @@ let setData = async (() => {
       .catch((er) => {
         console.log(er)
       })
-  )
 
-  await (
+  await
     beck
       .$query()
       .patchAndFetch({
@@ -325,11 +312,10 @@ let setData = async (() => {
       .catch((er) => {
         console.log(er)
       })
-  )
 
-})
+}
 
-setData()  
+setData()
   .then((d) => {
     process.exit()
   })
