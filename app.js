@@ -50,12 +50,16 @@ router.get('/', function (req, res) {
   res.send('check check 1 2')
 })
 
+router.get('/topvisitedurls', function (req, res) {
+  res.send('check check 1 2')
+})
+
 // router.get('/topvisitedurls', getTopVisitedURLs)
 // router.get('/toprequestedurls', getTopRequestedURLs)
 // router.post('/urls', new url)
 // router.post('/users...', new user)
 // router.put('/user/:id...', update user)
-// router.get('/user/:id', user prof)
+// router.get('/user/:id', user prof .. need most pop link)
 
 // prefix routes with /api
 app.use('/api', router)

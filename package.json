@@ -11,7 +11,7 @@
     "test": "mocha",
     "start": "nodemon --exec 'node -r babel-register -r babel-polyfill app.js'",
     "setupEnv": "node config/setup.js",
-    "co": "node consoleREPL.js"
+    "co": "node -r babel-register -r babel-polyfill consoleREPL.js"
   },
   "repository": {
     "type": "git",

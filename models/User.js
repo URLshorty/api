@@ -19,6 +19,7 @@ export default class User extends Model {
         username: {type: 'string', minLength: 1, maxLength: 50},
         email: {type: 'string', minLength: 1, maxLength: 80},
         password_digest: {type: 'string'},
+        is_admin: {type: 'integer'},
         most_visited_url_id: {type: 'integer'},
         created_at: {type: 'string'},
         updated_at: {type: 'string'}

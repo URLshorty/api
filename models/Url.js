@@ -19,6 +19,7 @@ export default class Url extends Model {
         original: {type: 'string', minLength: 1},
         shortened: {type: 'string', minLength: 1, maxLength: 255},
         requests: {type: 'integer'},
+        visits: {type: 'integer'},
         created_at: {type: 'string'},
         updated_at: {type: 'string'}
       }

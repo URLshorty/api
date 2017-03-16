@@ -1,6 +1,4 @@
 // run this to seed with Objection
-// it uses await to no foreign key constraints
-// and sync order of db interactions
 
 ///////////////////////////// knex setup (abstract this)
 
@@ -22,11 +20,6 @@
   } from '../../models'
 
 /////////////////////////////
-
-// es7's 'await' available through babel can replace the below
-// 'await' can only be inside asyncs/suspendables
-// var async = require('asyncawait/async')
-// var await = require('asyncawait/await')
 
 // clear all tables
 let clearData = async () => {
@@ -78,7 +71,7 @@ let setData = async () => {
           id: 1,
           username: 'Jennifer',
           email: `jennifer@gmail.com`,
-          password_digest: "a"
+          password_digest: "j"
         })
         .then((newUser) => {
           console.log(`${newUser.username} created`)
@@ -112,7 +105,8 @@ let setData = async () => {
           id: 3,
           username: 'Rohan',
           email: `rohan@gmail.com`,
-          password_digest: "a"
+          password_digest: "r",
+          is_admin: 1
         })
         .then((newUser) => {
           console.log(`${newUser.username} created`)
@@ -129,7 +123,7 @@ let setData = async () => {
           id: 4,
           username: 'Eric',
           email: `eric@gmail.com`,
-          password_digest: "a"
+          password_digest: "e"
         })
         .then((newUser) => {
           console.log(`${newUser.username} created`)
@@ -146,7 +140,8 @@ let setData = async () => {
           id: 5,
           username: 'Beck',
           email: `beck@gmail.com`,
-          password_digest: "a"
+          password_digest: "b",
+          is_admin: 1
         })
         .then((newUser) => {
           console.log(`${newUser.username} created`)
@@ -165,7 +160,7 @@ let setData = async () => {
         id: 1,
         original: "www.google.com",
         shortened: "g.com",
-        requests: 222,
+        requests: 9,
         visits: 800})
       .then((newUrl) => {
           console.log(`jennifer created ${newUrl.original}`)
@@ -183,8 +178,8 @@ let setData = async () => {
         id: 2,
         original: "www.yahoo.com",
         shortened: "y.com",
-        requests: 222,
-        visits: 800})
+        requests: 5,
+        visits: 80})
       .then((newUrl) => {
           console.log(`alex created ${newUrl.original}`)
           yahoo = newUrl
@@ -201,8 +196,8 @@ let setData = async () => {
         id: 3,
         original: "www.bing.com",
         shortened: "b.com",
-        requests: 222,
-        visits: 800})
+        requests: 2,
+        visits: 8})
       .then((newUrl) => {
           console.log(`rohan created ${newUrl.original}`)
           bing = newUrl
@@ -219,8 +214,8 @@ let setData = async () => {
         id: 4,
         original: "www.reddit.com",
         shortened: "r.com",
-        requests: 222,
-        visits: 800})
+        requests: 310,
+        visits: 9200})
       .then((newUrl) => {
           console.log(`eric created ${newUrl.original}`)
           reddit = newUrl
@@ -237,11 +232,245 @@ let setData = async () => {
         id: 5,
         original: "www.newyorker.com",
         shortened: "nyer.com",
-        requests: 222,
-        visits: 800})
+        requests: 101,
+        visits: 670})
       .then((newUrl) => {
           console.log(`beck created ${newUrl.original}`)
           newyorker = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let economist = {}
+  await
+    beck
+      .$relatedQuery('urls')
+      .insert({
+        id: 6,
+        original: "www.economist.com",
+        shortened: "econ.com",
+        requests: 51,
+        visits: 73})
+      .then((newUrl) => {
+          console.log(`beck created ${newUrl.original}`)
+          economist = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let nasa = {}
+  await
+    beck
+      .$relatedQuery('urls')
+      .insert({
+        id: 7,
+        original: "www.nasa.com",
+        shortened: "nas.com",
+        requests: 48,
+        visits: 89})
+      .then((newUrl) => {
+          console.log(`beck created ${newUrl.original}`)
+          nasa = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let wallstreetjournal = {}
+  await
+    beck
+      .$relatedQuery('urls')
+      .insert({
+        id: 8,
+        original: "www.wallstreetjournal.com",
+        shortened: "wsj.com",
+        requests: 45,
+        visits: 234})
+      .then((newUrl) => {
+          console.log(`beck created ${newUrl.original}`)
+          wallstreetjournal = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let theinternationalmdb = {}
+  await
+    jennifer
+      .$relatedQuery('urls')
+      .insert({
+        id: 9,
+        original: "www.theinternationalmdb.com",
+        shortened: "imdb.com",
+        requests: 56,
+        visits: 45})
+      .then((newUrl) => {
+          console.log(`jennifer created ${newUrl.original}`)
+          theinternationalmdb = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let naturestuff = {}
+  await
+    jennifer
+      .$relatedQuery('urls')
+      .insert({
+        id: 10,
+        original: "www.naturestuff.com",
+        shortened: "ns.com",
+        requests: 564,
+        visits: 45465})
+      .then((newUrl) => {
+          console.log(`jennifer created ${newUrl.original}`)
+          naturestuff = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let lifeofpie = {}
+  await
+    jennifer
+      .$relatedQuery('urls')
+      .insert({
+        id: 11,
+        original: "www.lifeofpie.com",
+        shortened: "lop.com",
+        requests: 45,
+        visits: 24})
+      .then((newUrl) => {
+          console.log(`jennifer created ${newUrl.original}`)
+          lifeofpie = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let kungfuhustle = {}
+  await
+    eric
+      .$relatedQuery('urls')
+      .insert({
+        id: 12,
+        original: "www.kungfuhustle.com",
+        shortened: "cfh.com",
+        requests: 87,
+        visits: 678})
+      .then((newUrl) => {
+          console.log(`eric created ${newUrl.original}`)
+          kungfuhustle = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let barnsnnoble = {}
+  await
+    eric
+      .$relatedQuery('urls')
+      .insert({
+        id: 13,
+        original: "www.barnsnnoble.com",
+        shortened: "bnn.com",
+        requests: 45,
+        visits: 24})
+      .then((newUrl) => {
+          console.log(`eric created ${newUrl.original}`)
+          barnsnnoble = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let zippers = {}
+  await
+    eric
+      .$relatedQuery('urls')
+      .insert({
+        id: 14,
+        original: "www.zippers.com",
+        shortened: "xyz.com",
+        requests: 48,
+        visits: 315})
+      .then((newUrl) => {
+          console.log(`eric created ${newUrl.original}`)
+          zippers = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let peaceandlove = {}
+  await
+    eric
+      .$relatedQuery('urls')
+      .insert({
+        id: 15,
+        original: "www.peaceandlove.com",
+        shortened: "pal.com",
+        requests: 67,
+        visits: 645})
+      .then((newUrl) => {
+          console.log(`eric created ${newUrl.original}`)
+          peaceandlove = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let overtherainbow = {}
+  await
+    rohan
+      .$relatedQuery('urls')
+      .insert({
+        id: 16,
+        original: "www.overtherainbow.com",
+        shortened: "otr.com",
+        requests: 55,
+        visits: 2454})
+      .then((newUrl) => {
+          console.log(`rohan created ${newUrl.original}`)
+          overtherainbow = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let alphabel = {}
+  await
+    rohan
+      .$relatedQuery('urls')
+      .insert({
+        id: 17,
+        original: "www.alphabel.com",
+        shortened: "abc.com",
+        requests: 54,
+        visits: 284})
+      .then((newUrl) => {
+          console.log(`rohan created ${newUrl.original}`)
+          alphabel = newUrl
+        })
+        .catch((er) => {
+          console.log(`error creating new url: ${er}`)
+        })
+
+  let depofmotorv = {}
+  await
+    rohan
+      .$relatedQuery('urls')
+      .insert({
+        id: 18,
+        original: "www.depofmotorv.com",
+        shortened: "dmv.com",
+        requests: 34,
+        visits: 214})
+      .then((newUrl) => {
+          console.log(`rohan created ${newUrl.original}`)
+          depofmotorv = newUrl
         })
         .catch((er) => {
           console.log(`error creating new url: ${er}`)
