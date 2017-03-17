@@ -13,12 +13,13 @@ export default class User_Url extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['username', 'email', 'passwordDigest'],
+      required: ['user_id', 'url_id'],
       properties: {
         id: {type: 'integer'},
-        user_id: {type: 'string', minLength: 1, maxLength: 50},
-        url_id: {type: 'string', minLength: 1, maxLength: 80},
-        password_digest: {type: 'integer'},
+        shortened: {type: 'string', minLength: 1, maxLength: 255},
+        visits: {type: 'integer'},
+        user_id: {type: 'integer'},
+        url_id: {type: 'integer'},
         created_at: {type: 'string'},
         updated_at: {type: 'string'}
       }
@@ -46,6 +47,15 @@ export default class User_Url extends Model {
         }
       }
     }
+  }
+
+  $beforeInsert() {
+    this.created_at = new Date().toISOString()
+    this.updated_at = new Date().toISOString()
+  }
+
+  $beforeUpdate() {
+    this.updated_at = new Date().toISOString()
   }
 
 }

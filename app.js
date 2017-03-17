@@ -34,7 +34,7 @@ const port = process.env.PORT || 3000
 
         let test = await Url
                     .query()
-                    .insert({original: 'another test'})
+                    .limit(10)
                     .then(function (x) {
                         console.log(x)
                         return x

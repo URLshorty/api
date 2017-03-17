@@ -28,7 +28,7 @@ let clearData = async () => {
     User_Url
       .query()
       .delete()
-      .then( (x) => console.log(`x records deleted from user_urls table`) )
+      .then( (x) => console.log(`${x} records deleted from user_urls table`) )
       .catch( (er) => console.log(er) )
   )
 
@@ -36,7 +36,7 @@ let clearData = async () => {
     User
       .query()
       .delete()
-      .then( (x) => console.log(`x records deleted from users table`) )
+      .then( (x) => console.log(`${x} records deleted from users table`) )
       .catch( (er) => console.log(er) )
   )
 
@@ -44,7 +44,7 @@ let clearData = async () => {
     Url
       .query()
       .delete()
-      .then( (x) => console.log(`x records deleted from urls table`) )
+      .then( (x) => console.log(`${x} records deleted from urls table`) )
       .catch( (er) => console.log(er) )
   )
 
@@ -152,329 +152,26 @@ let setData = async () => {
         })
 
   // users add urls
-  let google = {}
-  await
-    jennifer
-      .$relatedQuery('urls')
-      .insert({
-        id: 1,
-        original: "www.google.com",
-        shortened: "g.com",
-        requests: 9,
-        visits: 800})
-      .then((newUrl) => {
-          console.log(`jennifer created ${newUrl.original}`)
-          google = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let yahoo = {}
-  await
-    alex
-      .$relatedQuery('urls')
-      .insert({
-        id: 2,
-        original: "www.yahoo.com",
-        shortened: "y.com",
-        requests: 5,
-        visits: 80})
-      .then((newUrl) => {
-          console.log(`alex created ${newUrl.original}`)
-          yahoo = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let bing = {}
-  await
-    rohan
-      .$relatedQuery('urls')
-      .insert({
-        id: 3,
-        original: "www.bing.com",
-        shortened: "b.com",
-        requests: 2,
-        visits: 8})
-      .then((newUrl) => {
-          console.log(`rohan created ${newUrl.original}`)
-          bing = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let reddit = {}
-  await
-    eric
-      .$relatedQuery('urls')
-      .insert({
-        id: 4,
-        original: "www.reddit.com",
-        shortened: "r.com",
-        requests: 310,
-        visits: 9200})
-      .then((newUrl) => {
-          console.log(`eric created ${newUrl.original}`)
-          reddit = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let newyorker = {}
-  await
-    beck
-      .$relatedQuery('urls')
-      .insert({
-        id: 5,
-        original: "www.newyorker.com",
-        shortened: "nyer.com",
-        requests: 101,
-        visits: 670})
-      .then((newUrl) => {
-          console.log(`beck created ${newUrl.original}`)
-          newyorker = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let economist = {}
-  await
-    beck
-      .$relatedQuery('urls')
-      .insert({
-        id: 6,
-        original: "www.economist.com",
-        shortened: "econ.com",
-        requests: 51,
-        visits: 73})
-      .then((newUrl) => {
-          console.log(`beck created ${newUrl.original}`)
-          economist = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let nasa = {}
-  await
-    beck
-      .$relatedQuery('urls')
-      .insert({
-        id: 7,
-        original: "www.nasa.com",
-        shortened: "nas.com",
-        requests: 48,
-        visits: 89})
-      .then((newUrl) => {
-          console.log(`beck created ${newUrl.original}`)
-          nasa = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let wallstreetjournal = {}
-  await
-    beck
-      .$relatedQuery('urls')
-      .insert({
-        id: 8,
-        original: "www.wallstreetjournal.com",
-        shortened: "wsj.com",
-        requests: 45,
-        visits: 234})
-      .then((newUrl) => {
-          console.log(`beck created ${newUrl.original}`)
-          wallstreetjournal = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let theinternationalmdb = {}
-  await
-    jennifer
-      .$relatedQuery('urls')
-      .insert({
-        id: 9,
-        original: "www.theinternationalmdb.com",
-        shortened: "imdb.com",
-        requests: 56,
-        visits: 45})
-      .then((newUrl) => {
-          console.log(`jennifer created ${newUrl.original}`)
-          theinternationalmdb = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let naturestuff = {}
-  await
-    jennifer
-      .$relatedQuery('urls')
-      .insert({
-        id: 10,
-        original: "www.naturestuff.com",
-        shortened: "ns.com",
-        requests: 564,
-        visits: 45465})
-      .then((newUrl) => {
-          console.log(`jennifer created ${newUrl.original}`)
-          naturestuff = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let lifeofpie = {}
-  await
-    jennifer
-      .$relatedQuery('urls')
-      .insert({
-        id: 11,
-        original: "www.lifeofpie.com",
-        shortened: "lop.com",
-        requests: 45,
-        visits: 24})
-      .then((newUrl) => {
-          console.log(`jennifer created ${newUrl.original}`)
-          lifeofpie = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let kungfuhustle = {}
-  await
-    eric
-      .$relatedQuery('urls')
-      .insert({
-        id: 12,
-        original: "www.kungfuhustle.com",
-        shortened: "cfh.com",
-        requests: 87,
-        visits: 678})
-      .then((newUrl) => {
-          console.log(`eric created ${newUrl.original}`)
-          kungfuhustle = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let barnsnnoble = {}
-  await
-    eric
-      .$relatedQuery('urls')
-      .insert({
-        id: 13,
-        original: "www.barnsnnoble.com",
-        shortened: "bnn.com",
-        requests: 45,
-        visits: 24})
-      .then((newUrl) => {
-          console.log(`eric created ${newUrl.original}`)
-          barnsnnoble = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let zippers = {}
-  await
-    eric
-      .$relatedQuery('urls')
-      .insert({
-        id: 14,
-        original: "www.zippers.com",
-        shortened: "xyz.com",
-        requests: 48,
-        visits: 315})
-      .then((newUrl) => {
-          console.log(`eric created ${newUrl.original}`)
-          zippers = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let peaceandlove = {}
-  await
-    eric
-      .$relatedQuery('urls')
-      .insert({
-        id: 15,
-        original: "www.peaceandlove.com",
-        shortened: "pal.com",
-        requests: 67,
-        visits: 645})
-      .then((newUrl) => {
-          console.log(`eric created ${newUrl.original}`)
-          peaceandlove = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let overtherainbow = {}
-  await
-    rohan
-      .$relatedQuery('urls')
-      .insert({
-        id: 16,
-        original: "www.overtherainbow.com",
-        shortened: "otr.com",
-        requests: 55,
-        visits: 2454})
-      .then((newUrl) => {
-          console.log(`rohan created ${newUrl.original}`)
-          overtherainbow = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let alphabel = {}
-  await
-    rohan
-      .$relatedQuery('urls')
-      .insert({
-        id: 17,
-        original: "www.alphabel.com",
-        shortened: "abc.com",
-        requests: 54,
-        visits: 284})
-      .then((newUrl) => {
-          console.log(`rohan created ${newUrl.original}`)
-          alphabel = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
-
-  let depofmotorv = {}
-  await
-    rohan
-      .$relatedQuery('urls')
-      .insert({
-        id: 18,
-        original: "www.depofmotorv.com",
-        shortened: "dmv.com",
-        requests: 34,
-        visits: 214})
-      .then((newUrl) => {
-          console.log(`rohan created ${newUrl.original}`)
-          depofmotorv = newUrl
-        })
-        .catch((er) => {
-          console.log(`error creating new url: ${er}`)
-        })
+    let google = await jennifer.createUrl('www.google.com').then((x)=>x)
+    let yahoo = await alex.createUrl('www.yahoo.com').then((x)=>x)
+    let bing = await rohan.createUrl('www.bing.com').then((x)=>x)
+    let reddit = await eric.createUrl('www.reddit.com').then((x)=>x)
+    let bookstore = await beck.createUrl('www.bookstore.com').then((x)=>x)
+    let homedepot = await jennifer.createUrl('www.homedepot.com').then((x)=>x)
+    let loews = await alex.createUrl('www.loews.com').then((x)=>x)
+    let stopandshop = await rohan.createUrl('www.stopandshop.com').then((x)=>x)
+    let flourist = await eric.createUrl('www.flourist.com').then((x)=>x)
+    let peapod = await beck.createUrl('www.peapod.com').then((x)=>x)
+    let spaceships = await jennifer.createUrl('www.spaceships.com').then((x)=>x)
+    let golfsupplies = await alex.createUrl('www.golfsupplies.com').then((x)=>x)
+    let ufosightings = await rohan.createUrl('www.ufosightings.com').then((x)=>x)
+    let horseshoes = await eric.createUrl('www.horseshoes.com').then((x)=>x)
+    let rainbows = await beck.createUrl('www.rainbows.com').then((x)=>x)
+    let clovers = await jennifer.createUrl('www.clovers.com').then((x)=>x)
+    let gardensupply = await alex.createUrl('www.gardensupply.com').then((x)=>x)
+    let dmotorvehicles = await rohan.createUrl('www.dmotorvehicles.com').then((x)=>x)
+    let universitybooks = await eric.createUrl('www.universitybooks.com').then((x)=>x)
+    let baskinrobins = await beck.createUrl('www.baskinrobins.com').then((x)=>x)
 
   // set users' 'most visited urls'
   await
@@ -533,10 +230,10 @@ let setData = async () => {
     beck
       .$query()
       .patchAndFetch({
-        most_visited_url_id: newyorker.id
+        most_visited_url_id: homedepot.id
       })
       .then((d) => {
-        console.log("beck's most visited set to newyorker")
+        console.log("beck's most visited set to homedepot")
       })
       .catch((er) => {
         console.log(er)

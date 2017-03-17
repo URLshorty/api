@@ -1,9 +1,14 @@
 
 require('dotenv').config()
-const repl = require("repl")
+import repl from "repl"
+import chalk from "chalk"
+import moment from 'moment'
+
+
+const prompt = chalk.white.bgBlack.bold(`${moment().format('MM/D/YY, h:mm:ss')} >`) + " "
 
 var replServer = repl.start({
-  prompt: "in-app > ",
+  prompt: prompt,
 })
 
 // init and bind in knex in context as in app.js
