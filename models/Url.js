@@ -17,9 +17,7 @@ export default class Url extends Model {
       properties: {
         id: {type: 'integer'},
         original: {type: 'string', minLength: 1},
-        shortened: {type: 'string', minLength: 1, maxLength: 255},
         requests: {type: 'integer'},
-        visits: {type: 'integer'},
         created_at: {type: 'string'},
         updated_at: {type: 'string'}
       }
@@ -52,6 +50,15 @@ export default class Url extends Model {
         }
       }
     }
+  }
+
+  $beforeInsert() {
+    this.created_at = new Date().toISOString()
+    this.updated_at = new Date().toISOString()
+  }
+
+  $beforeUpdate() {
+    this.updated_at = new Date().toISOString()
   }
 
 }

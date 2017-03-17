@@ -55,5 +55,29 @@ export default class User extends Model {
     }
   }
 
-}
+  // look into a transaction for this
+  async createUrl(url) {
+    let promReturn = 'error at user#createUrl'
+    await // bubble this promise up properly *
+      this
+        .$relatedQuery('urls')
+        .insert({original: url})
+        .then((newUrl) => {
+          console.log(`${this.username} created ${newUrl.original}`)
+          // * look into returning the whole function from here i.e. 'return newUrl'
+          promReturn = newUrl
+        })
+        .catch((er) => console.log(er) )
+    return promReturn
+  }
 
+  $beforeInsert() {
+    this.created_at = new Date().toISOString()
+    this.updated_at = new Date().toISOString()
+  }
+
+  $beforeUpdate() {
+    this.updated_at = new Date().toISOString()
+  }
+
+}
