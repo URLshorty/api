@@ -66,89 +66,44 @@ let setData = async () => {
     // add users
     let jennifer = await
       User
-        .query()
-        .insert({
-          id: 1,
+        .create({
           username: 'Jennifer',
           email: `jennifer@gmail.com`,
           password_digest: "j"
         })
-        .then((newUser) => {
-          console.log(`${newUser.username} created`)
-          return newUser
-        })
-        .catch((er) => {
-          console.log(`error creating new user: ${er}`)
-        })
 
     let alex = await
       User
-        .query()
-        .insert({
-          id: 2,
+        .create({
           username: 'Alex',
           email: `alex@gmail.com`,
           password_digest: "a"
         })
-        .then((newUser) => {
-          console.log(`${newUser.username} created`)
-          return newUser
-        })
-        .catch((er) => {
-          console.log(`error creating new user: ${er}`)
-        })
 
     let rohan = await
       User
-        .query()
-        .insert({
-          id: 3,
+        .create({
           username: 'Rohan',
           email: `rohan@gmail.com`,
           password_digest: "r",
           is_admin: 1
         })
-        .then((newUser) => {
-          console.log(`${newUser.username} created`)
-          return newUser
-        })
-        .catch((er) => {
-          console.log(`error creating new user: ${er}`)
-        })
 
     let eric = await
       User
-        .query()
-        .insert({
-          id: 4,
+        .create({
           username: 'Eric',
           email: `eric@gmail.com`,
           password_digest: "e"
         })
-        .then((newUser) => {
-          console.log(`${newUser.username} created`)
-          return newUser
-        })
-        .catch((er) => {
-          console.log(`error creating new user: ${er}`)
-        })
 
     let beck = await
       User
-        .query()
-        .insert({
-          id: 5,
+        .create({
           username: 'Beck',
           email: `beck@gmail.com`,
           password_digest: "b",
           is_admin: 1
-        })
-        .then((newUser) => {
-          console.log(`${newUser.username} created`)
-          return newUser
-        })
-        .catch((er) => {
-          console.log(`error creating new user: ${er}`)
         })
 
   // users add urls

@@ -55,19 +55,38 @@ export default class User extends Model {
     }
   }
 
-  // look into a transaction for this
+  // look into a transaction for these
+  static async create(userHash) {
+    let promReturn = 'error at user#create'
+    await
+      this
+        .query()
+        .insert(userHash)
+        .then((newUser) => {
+          console.log(`new user ${newUser.username} created`)
+          promReturn = newUser
+        })
+        .catch((er) => {
+          console.log(er)
+          promReturn = promReturn + ": " + er
+        })
+    return promReturn
+  }
+
   async createUrl(url) {
     let promReturn = 'error at user#createUrl'
-    await // bubble this promise up properly *
+    await
       this
         .$relatedQuery('urls')
-        .insert({original: url})
+        .insert({address: url})
         .then((newUrl) => {
           console.log(`${this.username} created ${newUrl.original}`)
-          // * look into returning the whole function from here i.e. 'return newUrl'
           promReturn = newUrl
         })
-        .catch((er) => console.log(er) )
+        .catch((er) => {
+          console.log(er)
+          promReturn = promReturn + ": " + er
+        })
     return promReturn
   }
 

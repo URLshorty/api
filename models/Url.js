@@ -13,10 +13,10 @@ export default class Url extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['original'],
+      required: ['address'],
       properties: {
         id: {type: 'integer'},
-        original: {type: 'string', minLength: 1},
+        address: {type: 'string', minLength: 1},
         requests: {type: 'integer'},
         created_at: {type: 'string'},
         updated_at: {type: 'string'}
@@ -50,6 +50,47 @@ export default class Url extends Model {
         }
       }
     }
+  }
+
+  static async create(url) {
+    let promReturn = 'error at url#create'
+    await
+      this
+        .query()
+        .insert({address: url})
+        .then((newUrl) => {
+          console.log(`new URL ${newUrl.address} created`)
+          promReturn = newUrl
+        })
+        .catch((er) => {
+          console.log(er)
+          promReturn = promReturn + ": " + er
+        })
+    return promReturn
+  }
+
+  static async getMostRequested(count, selections) {
+    let promReturn = 'error at Url::getMostRequested'
+    await this
+        .query()
+        .select(selections)
+        .orderBy('requests', 'desc')
+        .limit(count)
+        .then( (arr) => promReturn = arr )
+        .catch( (er) => promReturn = promReturn + ": " + er )
+    return promReturn
+  }
+
+  static async getMostVisited(count, selections) {
+    let promReturn = 'error at Url::getMostVisited'
+    await this
+        .query()
+        .select(selections)
+        .orderBy('visits', 'desc')
+        .limit(count)
+        .then( (arr) => promReturn = arr )
+        .catch( (er) => promReturn = promReturn + ": " + er )
+    return promReturn
   }
 
   $beforeInsert() {

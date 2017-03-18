@@ -1,4 +1,6 @@
 
+// CAUTION (and fix) 'await' keyword not working in REPL
+
 require('dotenv').config()
 import repl from "repl"
 import chalk from "chalk"

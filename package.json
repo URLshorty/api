@@ -12,6 +12,7 @@
     "start": "nodemon --exec 'node -r babel-register -r babel-polyfill app.js'",
     "setupEnv": "node config/setup.js",
     "co": "node -r babel-register -r babel-polyfill contextREPL.js",
+    "cr": "nodemon --exec 'node -r babel-register -r babel-polyfill contextREPL.js'",
     "de": "node debug -r babel-register -r babel-polyfill"
   },
   "repository": {
