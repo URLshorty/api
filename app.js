@@ -103,7 +103,7 @@ router.get('/users/:id', function (req, res) {
 })
 
 router.patch('/users/:id', async function (req, res) {
-  // reminder: verification and strong parameters (allows invalid field)
+  // reminder: verification and strong parameters (allows invalid fields)
   User
     .query()
     .patchAndFetchById(req.params.id, req.query)
@@ -113,7 +113,7 @@ router.patch('/users/:id', async function (req, res) {
       } else {
         res.send({error: 'User not found.'})
       }
-    }) // can return undefined
+    })
     .catch( (er) => res.send(er) )
 })
 

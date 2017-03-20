@@ -53,44 +53,44 @@ export default class Url extends Model {
   }
 
   static async create(url) {
-    let promReturn = 'error at url#create'
-    await
-      this
+    try {
+      const newUrl = await this
         .query()
         .insert({address: url})
-        .then((newUrl) => {
-          console.log(`new URL ${newUrl.address} created`)
-          promReturn = newUrl
-        })
-        .catch((er) => {
-          console.log(er)
-          promReturn = promReturn + ": " + er
-        })
-    return promReturn
+      console.log(`new URL created: ${newUrl.address}`)
+      return newUrl
+    } catch (er) {
+      console.log(`error at Url::create: ${er}`)
+      return `error createing URL: ${er}`
+    }
   }
 
   static async getMostRequested(count, selections) {
-    let promReturn = 'error at Url::getMostRequested'
-    await this
+    try {
+      const mostRequested = await this
         .query()
         .select(selections)
         .orderBy('requests', 'desc')
         .limit(count)
-        .then( (arr) => promReturn = arr )
-        .catch( (er) => promReturn = promReturn + ": " + er )
-    return promReturn
+      return mostRequested
+    } catch (er) {
+      console.log(`error at Url::getMostRequested: ${er}`)
+      return `error gathering most requested Urls: ${er}`
+    }
   }
 
   static async getMostVisited(count, selections) {
-    let promReturn = 'error at Url::getMostVisited'
-    await this
+    try {
+      const mostVisited = await this
         .query()
         .select(selections)
         .orderBy('visits', 'desc')
         .limit(count)
-        .then( (arr) => promReturn = arr )
-        .catch( (er) => promReturn = promReturn + ": " + er )
-    return promReturn
+      return mostVisited
+    } catch (er) {
+      console.log(`error at Url::getMostVisited: ${er}`)
+      return `error gathering most visited Urls: ${er}`
+    }
   }
 
   $beforeInsert() {

@@ -55,39 +55,31 @@ export default class User extends Model {
     }
   }
 
-  // look into a transaction for these
+
   static async create(userHash) {
-    let promReturn = 'error at user#create'
-    await
-      this
+    try {
+      const newUser = await this
         .query()
         .insert(userHash)
-        .then((newUser) => {
-          console.log(`new user ${newUser.username} created`)
-          promReturn = newUser
-        })
-        .catch((er) => {
-          console.log(er)
-          promReturn = promReturn + ": " + er
-        })
-    return promReturn
+      console.log(`new user ${newUser.username} created`)
+      return newUser
+    } catch (er) {
+      console.log(`error at User::create: ${er}`)
+      return `error createing URL: ${er}`
+    }
   }
 
   async createUrl(url) {
-    let promReturn = 'error at user#createUrl'
-    await
-      this
+    try {
+      const newUrl = await this
         .$relatedQuery('urls')
         .insert({address: url})
-        .then((newUrl) => {
-          console.log(`${this.username} created ${newUrl.original}`)
-          promReturn = newUrl
-        })
-        .catch((er) => {
-          console.log(er)
-          promReturn = promReturn + ": " + er
-        })
-    return promReturn
+      console.log(`${this.username} created ${newUrl.address}`)
+      return newUrl
+    } catch (er) {
+      console.log(`error at user#createUrl: ${er}`)
+      return `error createing URL: ${er}`
+    }
   }
 
   $beforeInsert() {
