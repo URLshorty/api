@@ -38,14 +38,44 @@ app.use(bodyParser.json())
 // port
 const port = process.env.PORT || 3000
 
+// check sessions data
+app.use(async function(req, res, next) {
+  if (req.session && req.session.user) {
+    try {
+      const user = await User
+        .query()
+        .findById(req.session.user.id)
+      req.user = user // set req.user to req.session.user
+      delete req.user.password_digest
+      req.session.user = req.user  // refresh the session value
+    } catch (er) {
+      console.log(`error checking session data: ${er}`)
+    }
+    next()
+  } else {
+    next()
+  }
+})
+
 // prefix routes with /api
 app.use('/api', router)
 
-////
-//// TODO error handling and strong parameters in node
-//// global middleware function for sessions
-//// Start using Sublime's Todo​Review package
-////
+// middleware functions
+function requireLogin (req, res, next) {
+  if (!req.user) {
+    res.send('No user logged in.')
+  } else {
+    next()
+  }
+}
+
+function authorizeLogin (req, res, next) {
+  if ( req.user.id === parseInt(req.params.id) ) {
+    next()
+  } else {
+    res.send('This user is not authorized for this request.')
+  }
+}
 
 ///// ROUTES
 router.get('/', function (req, res) {
@@ -59,7 +89,7 @@ router.post('/login',  function (req, res) {
     .findById(req.query.id)
     .then( (user) => {
       if ( user && user.password_digest === req.query.password ) {
-        delete user.password
+        delete user.password_digest
         req.session.user = user
         res.send(`Session set for ${user.username}`)
       } else {
@@ -72,11 +102,9 @@ router.post('/login',  function (req, res) {
   })
 })
 
-router.post('/logout', function (req, res) {
-
+router.post('/logout', requireLogin, function (req, res) {
   req.session.reset()
   res.send("Logged out.")
-
 })
 
 // USERS
@@ -102,14 +130,15 @@ router.get('/users/:id', function (req, res) {
     .catch( (er) => res.send(er) )
 })
 
-router.patch('/users/:id', async function (req, res) {
-  // reminder: verification and strong parameters (allows invalid fields)
+
+router.patch('/users/:id', requireLogin, authorizeLogin, async function (req, res) {
+  // research strong parameters (allows invalid field)
   User
     .query()
     .patchAndFetchById(req.params.id, req.query)
-    .then( (d) => {
-      if (d) {
-        res.send(d)
+    .then( ( user ) => {
+      if ( user ) {
+        res.send( user )
       } else {
         res.send({error: 'User not found.'})
       }
@@ -119,12 +148,26 @@ router.patch('/users/:id', async function (req, res) {
 
 // URLS
 router.post('/urls', async function (req, res) {
-  // signed in can use User.createUrl()
-  // not signed in can use Url.create()
-  res.send(
-    await
-      Url.create(req.query.address)
-  )
+  let address = req.query.address
+  if (!req.user) {
+    Url.create(address)
+      .then((url) => res.send(url))
+      .catch((er) => res.send(er))
+  } else {
+    user = await User
+      .query()
+      .findById(req.session.user.id)
+      .then((user) => {
+        user
+          .createUrl(address)
+          .then((url) => res.send(url))
+          .catch((er) => res.send({error: er}))
+      })
+      .catch((er) => {
+        console.log(er)
+        res.send({error: er})
+      })
+  }
 })
 
 router.get('/toprequestedurls', async function (req, res) {
