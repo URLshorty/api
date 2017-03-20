@@ -5,6 +5,15 @@ const app = express()
 const router = express.Router()
 const bodyParser = require('body-parser')
 
+// sessions setup
+const session = require('client-sessions')
+app.use(session({
+  cookieName: 'session',
+  secret: 'fHgJKMMdsfaSDyLSdsfUsdfgVQWM',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+}))
+
 // initialize knex connection
 const Knex = require('knex')
 const knexConfig = require('./knexfile')
@@ -26,97 +35,113 @@ import {
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-// port & router
+// port
 const port = process.env.PORT || 3000
 
-// do logger and cookieParser()?
+// prefix routes with /api
+app.use('/api', router)
 
+////
+//// TODO error handling and strong parameters in node
+//// global middleware function for sessions
+//// Start using Sublime's Todo​Review package
+////
+
+///// ROUTES
 router.get('/', function (req, res) {
   res.send('check check 1 2, this is root path of the api, where the docs will go')
 })
 
-// TODO - format errors
-router.post('/urls', async function (req, res) {
-  // signed in can use User.createUrl()
-  // not signed in can use Url.create()
-  let newUrl =
-    await
-      Url
-        .create(req.query.address)
-        .then( (d) => d )
-        .catch( (er) => er )
-  res.send(
-    newUrl
-  )
+// SESSIONS
+router.post('/login',  function (req, res) {
+  User
+    .query()
+    .findById(req.query.id)
+    .then( (user) => {
+      if ( user && user.password_digest === req.query.password ) {
+        delete user.password
+        req.session.user = user
+        res.send(`Session set for ${user.username}`)
+      } else {
+        res.send({error: 'Incorrect username or password.'})
+      }
+    })
+    .catch( (er) => {
+      console.log(er)
+      res.send({ error: er })
+  })
 })
 
-router.post('/users', async function (req, res) {
-  let newUser =
-    await
-      User
-        .create(req.query)
-        .then( (d) => d )
-        .catch( (er) => er )
-  res.send(
-    newUser
-  )
+router.post('/logout', function (req, res) {
+
+  req.session.reset()
+  res.send("Logged out.")
+
+})
+
+// USERS
+router.post('/users', function (req, res) {
+  User
+    .create(req.query)
+    .then( (user) => res.send(user) )
+    .catch( (er) => res.send(er) )
 })
 
 // add retrieval of related most visited url and shortened version
-router.get('/users/:id', async function (req, res) {
-  let resp
-  await
-    User
-      .query()
-      .where('id', '=', req.params.id)
-      .then( (d) => resp = d[0] )
-      .catch( (er) => resp = er )
-  if (!!resp) {
-     res.send(resp) // error can be here too
-  } else {
-    res.status(404)
-    res.send({ error: 'That user not found.' })
-  }
+router.get('/users/:id', function (req, res) {
+  User
+    .query()
+    .findById(req.params.id)
+    .then( (user) => {
+      if ( user ) {
+        res.send(user)
+      } else {
+        res.send({error: 'User not found.'})
+      }
+    })
+    .catch( (er) => res.send(er) )
 })
 
 router.patch('/users/:id', async function (req, res) {
-  // reminder: verification
-  let resp
-  await
-    User
-      .query()
-      .patchAndFetchById(req.params.id, req.query)
-      .then( (d) => resp = d  ) // can return undefined
-      .catch( (er) => resp = er )
-  if (!!resp) {
-     res.send(resp) // error can be here too
-  } else {
-    res.send({ error: 'Something went wrong.' })
-  }
+  // reminder: verification and strong parameters (allows invalid field)
+  User
+    .query()
+    .patchAndFetchById(req.params.id, req.query)
+    .then( (d) => {
+      if (d) {
+        res.send(d)
+      } else {
+        res.send({error: 'User not found.'})
+      }
+    }) // can return undefined
+    .catch( (er) => res.send(er) )
+})
+
+// URLS
+router.post('/urls', async function (req, res) {
+  // signed in can use User.createUrl()
+  // not signed in can use Url.create()
+  res.send(
+    await
+      Url.create(req.query.address)
+  )
 })
 
 router.get('/toprequestedurls', async function (req, res) {
   res.send(
     await
-      Url
-        .getMostRequested(10, ['id', 'original', 'requests'])
-        .then( (d) => d )
-        .catch( (er) => er )
+      Url.getMostRequested(10, ['id', 'address', 'requests'])
   )
 })
 
 router.get('/topvisitedurls', async function (req, res) {
   res.send(
     await
-      Url
-        .getMostVisited(10, ['id', 'original', 'visits'])
-        .then( (d) => d )
-        .catch( (er) => er )
+      Url.getMostVisited(10, ['id', 'address', 'visits'])
   )
 })
 
-// prefix routes with /api
-app.use('/api', router)
+/////
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
