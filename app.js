@@ -9,7 +9,7 @@ const bodyParser = require('body-parser')
 const session = require('client-sessions')
 app.use(session({
   cookieName: 'session',
-  secret: 'fHgJKMMdsfaSDyLSdsfUsdfgVQWM',
+  secret: process.env.DATABASE_STRING,
   duration: 30 * 60 * 1000,
   activeDuration: 5 * 60 * 1000,
 }))

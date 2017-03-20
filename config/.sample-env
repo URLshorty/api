@@ -1,3 +1,9 @@
 // dev environmental variables using dotenv
 
-DATABASE_URL=dburl...
+SESSION_SECRET=''
+
+DATABASE_USERNAME=''
+DATABASE_PASSWORD=''
+DATABASE_NAME=''
+TEST_DATABASE_STRING=''
+DATABASE_STRING=''
