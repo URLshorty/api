@@ -1,4 +1,8 @@
 import { Model } from 'objection'
+import {
+  User,
+  User_Url,
+} from './'
 
 export default class Url extends Model {
   // Table name is the only required property.
@@ -52,16 +56,30 @@ export default class Url extends Model {
     }
   }
 
-  static async create(url) {
+  static async create(address, user) {
+    let userId
+    user ? userId = user.id : userId = null
     try {
+      let newUserUrl
       const newUrl = await this
         .query()
-        .insert({address: url})
+        .insert({
+          address: address
+        })
+      if (newUrl) {
+        newUserUrl = await User_Url
+          .query()
+          .insert({
+            url_id: newUrl.id,
+            user_id: userId,
+            shortened: "shortened version",
+          })
+      }
       console.log(`new URL created: ${newUrl.address}`)
-      return newUrl
+      return {newUrl: newUrl, newUserUrl: newUserUrl}
     } catch (er) {
       console.log(`error at Url::create: ${er}`)
-      return `error createing URL: ${er}`
+      return `error creating URL: ${er}`
     }
   }
 
@@ -91,6 +109,41 @@ export default class Url extends Model {
       console.log(`error at Url::getMostVisited: ${er}`)
       return `error gathering most visited Urls: ${er}`
     }
+  }
+
+  async getNewShortened(user) {
+
+    // REWRITE ME WITH PROMISE.ALL
+    try {
+      // set user
+      let currUserId = null
+      if (user) {
+        let currUserArr = await User
+          .query()
+          .where({
+            id: user.id
+          })
+        currUserId = currUserArr[0].id
+      }
+      // new user_url
+      let user_url = await User_Url
+        .query()
+        .insert({
+          user_id: currUserId,
+          url_id: this.id,
+          shortened: "this is where the shortened version goes"
+        })
+      // increment requests on url
+      await this.$query()
+        .increment("requests", 1)
+      console.log(`shortened: ${user_url}`)
+      return {newUserUrl: user_url}
+    } catch (er) {
+      let message = `error at Url::getNewShortened: ${er}`
+      console.log(message)
+      return message
+    }
+
   }
 
   $beforeInsert() {

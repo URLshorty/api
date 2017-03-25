@@ -133,8 +133,7 @@ router.get('/users/:id', function (req, res) {
 
 router.patch('/users/:id', requireLogin, authorizeLogin, async function (req, res) {
   // research strong parameters (allows invalid field)
-  User
-    .query()
+  User.query()
     .patchAndFetchById(req.params.id, req.query)
     .then( ( user ) => {
       if ( user ) {
@@ -149,25 +148,22 @@ router.patch('/users/:id', requireLogin, authorizeLogin, async function (req, re
 // URLS
 router.post('/urls', async function (req, res) {
   let address = req.query.address
-  if (!req.user) {
-    Url.create(address)
-      .then((url) => res.send(url))
-      .catch((er) => res.send(er))
-  } else {
-    user = await User
-      .query()
-      .findById(req.session.user.id)
-      .then((user) => {
-        user
-          .createUrl(address)
+
+    try {
+    // check if URL record already exists
+      let urlArr = await Url.query().where({address: address})
+      if (urlArr.length) {
+        // req.user undefined if no user
+        urlArr[0].getNewShortened(req.user)
           .then((url) => res.send(url))
-          .catch((er) => res.send({error: er}))
-      })
-      .catch((er) => {
-        console.log(er)
-        res.send({error: er})
-      })
-  }
+      } else {
+        Url.create(address, req.user)
+          .then((url) => res.send(url))
+      }
+    } catch(er) {
+      res.send(er)
+    }
+
 })
 
 router.get('/toprequestedurls', async function (req, res) {

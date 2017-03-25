@@ -18,7 +18,7 @@ export default class User_Url extends Model {
         id: {type: 'integer'},
         shortened: {type: 'string', minLength: 1, maxLength: 255},
         visits: {type: 'integer'},
-        user_id: {type: 'integer'},
+        user_id: {type: ['integer', null]},
         url_id: {type: 'integer'},
         created_at: {type: 'string'},
         updated_at: {type: 'string'}
