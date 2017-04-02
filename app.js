@@ -57,8 +57,7 @@ app.use(async function(req, res, next) {
   }
 })
 
-// prefix routes with /api
-app.use('/api', router)
+app.use(router)
 
 // middleware functions
 function requireLogin (req, res, next) {
@@ -83,7 +82,7 @@ router.get('/', function (req, res) {
 })
 
 // SESSIONS
-router.post('/login',  function (req, res) {
+router.post('/api/login',  function (req, res) {
   User
     .query()
     .findById(req.query.id)
@@ -102,13 +101,13 @@ router.post('/login',  function (req, res) {
   })
 })
 
-router.post('/logout', requireLogin, function (req, res) {
+router.post('/api/logout', requireLogin, function (req, res) {
   req.session.reset()
   res.send("Logged out.")
 })
 
 // USERS
-router.post('/users', function (req, res) {
+router.post('/api/users', function (req, res) {
   User
     .create(req.query)
     .then( (user) => res.send(user) )
@@ -116,7 +115,7 @@ router.post('/users', function (req, res) {
 })
 
 // add retrieval of related most visited url and shortened version
-router.get('/users/:id', function (req, res) {
+router.get('/api/users/:id', function (req, res) {
   User
     .query()
     .findById(req.params.id)
@@ -131,7 +130,7 @@ router.get('/users/:id', function (req, res) {
 })
 
 
-router.patch('/users/:id', requireLogin, authorizeLogin, async function (req, res) {
+router.patch('/api/users/:id', requireLogin, authorizeLogin, async function (req, res) {
   // research strong parameters (allows invalid field)
   User.query()
     .patchAndFetchById(req.params.id, req.query)
@@ -146,7 +145,7 @@ router.patch('/users/:id', requireLogin, authorizeLogin, async function (req, re
 })
 
 // URLS
-router.post('/urls', async function (req, res) {
+router.post('/api/urls', async function (req, res) {
   let address = req.query.address
 
     try {
@@ -166,18 +165,29 @@ router.post('/urls', async function (req, res) {
 
 })
 
-router.get('/toprequestedurls', async function (req, res) {
+router.get('/api/toprequestedurls', async function (req, res) {
   res.send(
     await
       Url.getMostRequested(10, ['id', 'address', 'requests'])
   )
 })
 
-router.get('/topvisitedurls', async function (req, res) {
+router.get('/api/topvisitedurls', async function (req, res) {
   res.send(
     await
       Url.getMostVisited(10, ['id', 'address', 'visits'])
   )
+})
+
+router.get('/*', async function (req, res) {
+  const shortened = req.params[0]
+  let fullAddress = await Url.getFullAddress(shortened)
+
+  if ( fullAddress.slice(0,4) !== "http" ) {
+    fullAddress = "http://" + fullAddress
+  }
+
+  res.redirect(fullAddress)
 })
 
 /////

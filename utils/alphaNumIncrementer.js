@@ -40,7 +40,6 @@ export default function incrementAlphaNumeric(prev){
   }
 
   let next = arr.join('')
-  console.log(next)
   return next
 
 }
