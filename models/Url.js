@@ -88,10 +88,13 @@ export default class Url extends Model {
           })
       }
       console.log(`new URL created: ${newUrl.address}`)
-      return {newUrl: newUrl, newUserUrl: newUserUrl}
+      return {
+        newUrl: newUrl,
+        newUserUrl: newUserUrl,
+      }
     } catch (er) {
       console.log(`error at Url::create: ${er}`)
-      return `error creating URL: ${er}`
+      throw er
     }
   }
 
@@ -159,7 +162,7 @@ export default class Url extends Model {
       return thisUrl.address
     } catch (er) {
       console.log(`error at Url::goToShortened: ${er}`)
-      return {error: "cannot retrieve that URL"}
+      throw er
     }
   }
 
@@ -203,7 +206,7 @@ export default class Url extends Model {
     } catch (er) {
       let message = `error at Url::getNewShortened: ${er}`
       console.log(message)
-      return message
+      throw er
     }
   }
 

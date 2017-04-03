@@ -94,7 +94,11 @@ router.post('/api/login',  function (req, res) {
       if ( user && user.password_digest === req.query.password ) {
         delete user.password_digest
         req.session.user = user
-        res.send(`Session set for ${user.username}`)
+        res.send({
+          id: user.id,
+          username: user.username,
+          isAdmin: user.is_admin,
+        })
       } else {
         res.send({error: 'Incorrect username or password.'})
       }
@@ -107,15 +111,29 @@ router.post('/api/login',  function (req, res) {
 
 router.post('/api/logout', requireLogin, function (req, res) {
   req.session.reset()
-  res.send("Logged out.")
+  res.send({
+    message: 'Logged out. Thank you.'
+  })
 })
 
 // USERS
 router.post('/api/users', function (req, res) {
   User
-    .create(req.query)
-    .then( (user) => res.send(user) )
-    .catch( (er) => res.send(er) )
+    .create({
+      ...req.query,
+      is_admin: parseInt(req.query.is_admin),
+    })
+    .then(
+      (user) => res.send({
+        id: user.id,
+        username: user.username,
+      })
+    )
+    .catch(
+      (er) => {
+        res.send(er)
+      }
+    )
 })
 
 // add retrieval of related most visited url and shortened version
@@ -125,7 +143,11 @@ router.get('/api/users/:id', function (req, res) {
     .findById(req.params.id)
     .then( (user) => {
       if ( user ) {
-        res.send(user)
+        // get most visited goes here
+        res.send({
+          id: user.id,
+          username: user.username,
+        })
       } else {
         res.send({error: 'User not found.'})
       }
@@ -135,7 +157,7 @@ router.get('/api/users/:id', function (req, res) {
 
 
 router.patch('/api/users/:id', requireLogin, authorizeLogin, async function (req, res) {
-  // research strong parameters (allows invalid field)
+  // research strong parameters - allows invalid fields!!
   User.query()
     .patchAndFetchById(req.params.id, req.query)
     .then( ( user ) => {
@@ -158,10 +180,14 @@ router.post('/api/urls', async function (req, res) {
       if (urlArr.length) {
         // req.user undefined if no user
         urlArr[0].getNewShortened(req.user)
-          .then((url) => res.send(url))
+          .then(
+            (url) => res.send(url)
+          )
       } else {
         Url.create(address, req.user)
-          .then((url) => res.send(url))
+          .then(
+            (url) => res.send(url)
+          )
       }
     } catch(er) {
       res.send(er)

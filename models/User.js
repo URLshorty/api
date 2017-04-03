@@ -65,7 +65,7 @@ export default class User extends Model {
       return newUser
     } catch (er) {
       console.log(`error at User::create: ${er}`)
-      return `error creating URL: ${er}`
+      throw er
     }
   }
 
