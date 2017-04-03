@@ -3,6 +3,10 @@ import {
   User,
   User_Url,
 } from './'
+import {
+  alphaNumIncrementer,
+} from '../utils'
+
 
 export default class Url extends Model {
   // Table name is the only required property.
@@ -21,9 +25,10 @@ export default class Url extends Model {
       properties: {
         id: {type: 'integer'},
         address: {type: 'string', minLength: 1},
+        visits: {type: 'integer'},
         requests: {type: 'integer'},
         created_at: {type: 'string'},
-        updated_at: {type: 'string'}
+        updated_at: {type: 'string'},
       }
     }
   }
@@ -61,18 +66,25 @@ export default class Url extends Model {
     user ? userId = user.id : userId = null
     try {
       let newUserUrl
+      // new short url
+      const previous = await User_Url
+        .query()
+        .select('shortened')
+        .orderBy('id','desc')
+        .limit(1)
+      const next = alphaNumIncrementer(previous[0].shortened)
       const newUrl = await this
         .query()
         .insert({
           address: address
         })
-      if (newUrl) {
+      if (newUrl && next) {
         newUserUrl = await User_Url
           .query()
           .insert({
             url_id: newUrl.id,
             user_id: userId,
-            shortened: "shortened version",
+            shortened: next,
           })
       }
       console.log(`new URL created: ${newUrl.address}`)
@@ -111,10 +123,49 @@ export default class Url extends Model {
     }
   }
 
-  async getNewShortened(user) {
+  // research db transactions implementations for getFullAddress() and getNewShortened()
 
-    // REWRITE ME WITH PROMISE.ALL
+  static async getFullAddress(short_address) {
     try {
+
+      // get by shortened
+      const userUrlArr = await User_Url
+        .query()
+        .where('shortened', short_address)
+      const thisUserUrl = userUrlArr[0]
+
+      // increment visits to shortened
+      await thisUserUrl
+        .$query()
+        .patch({
+          visits: thisUserUrl.visits + 1
+        })
+        console.log(thisUserUrl)
+
+      // get full
+      const urlArr = await this
+        .query()
+        .where('id', thisUserUrl.url_id)
+      const thisUrl = urlArr[0]
+
+      // increment visits to full
+      await thisUrl
+        .$query()
+        .patch({
+          visits: thisUrl.visits + 1
+        })
+
+      console.log(`{retrieved: ${thisUrl}, incremented ${thisUserUrl}}`)
+      return thisUrl.address
+    } catch (er) {
+      console.log(`error at Url::goToShortened: ${er}`)
+      return {error: "cannot retrieve that URL"}
+    }
+  }
+
+  async getNewShortened(user) {
+    try {
+
       // set user
       let currUserId = null
       if (user) {
@@ -125,17 +176,28 @@ export default class Url extends Model {
           })
         currUserId = currUserArr[0].id
       }
+
+      // new short url
+      const previous = await User_Url
+        .query()
+        .select('shortened')
+        .orderBy('id','desc')
+        .limit(1)
+      const next = alphaNumIncrementer(previous[0].shortened)
+
       // new user_url
       let user_url = await User_Url
         .query()
         .insert({
           user_id: currUserId,
           url_id: this.id,
-          shortened: "this is where the shortened version goes"
+          shortened: next
         })
+
       // increment requests on url
       await this.$query()
         .increment("requests", 1)
+
       console.log(`shortened: ${user_url}`)
       return {newUserUrl: user_url}
     } catch (er) {
@@ -143,7 +205,6 @@ export default class Url extends Model {
       console.log(message)
       return message
     }
-
   }
 
   $beforeInsert() {
