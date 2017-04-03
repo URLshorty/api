@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const router = express.Router()
+const cors = require('cors')
 const bodyParser = require('body-parser')
 
 // sessions setup
@@ -30,6 +31,9 @@ import {
   User,
   User_Url,
 } from './models'
+
+// allow cors
+app.use(cors()) // preflight POST & PATCH
 
 // config bodyParser() for gathering POST data
 app.use(bodyParser.urlencoded({ extended: true }))
