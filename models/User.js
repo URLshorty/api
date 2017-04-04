@@ -1,4 +1,5 @@
 import { Model } from 'objection'
+import bcrypt from 'bcrypt'
 
 export default class User extends Model {
   // Table name is the only required property.
@@ -18,7 +19,7 @@ export default class User extends Model {
         id: {type: 'integer'},
         username: {type: 'string', minLength: 1, maxLength: 50},
         email: {type: 'string', minLength: 1, maxLength: 80},
-        password_digest: {type: 'string'},
+        password_digest: {type: 'string', maxLength: 70},
         is_admin: {type: 'integer'},
         most_visited_url_id: {type: 'integer'},
         created_at: {type: 'string'},
@@ -60,7 +61,10 @@ export default class User extends Model {
     try {
       const newUser = await this
         .query()
-        .insert(userHash)
+        .insert({
+          ...userHash,
+          password_digest: bcrypt.hashSync(userHash.password, 10)
+        })
       console.log(`new user ${newUser.username} created`)
       return newUser
     } catch (er) {

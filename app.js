@@ -32,6 +32,9 @@ import {
   User_Url,
 } from './models'
 
+// bcrypt
+import bcrypt from 'bcrypt'
+
 // allow cors
 app.use(cors()) // preflight POST & PATCH
 
@@ -91,7 +94,7 @@ router.post('/api/login',  function (req, res) {
     .query()
     .findById(req.query.id)
     .then( (user) => {
-      if ( user && user.password_digest === req.query.password ) {
+      if ( user && bcrypt.compareSync(req.query.password, user.password_digest) ) {
         delete user.password_digest
         req.session.user = user
         res.send({
