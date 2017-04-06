@@ -6,14 +6,19 @@ const router = express.Router()
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
-// sessions setup
+// authentication
 const session = require('client-sessions')
+// session cookie setup
+const sessionExpiration = 2 * 60 * 60 * 1000 // 2 hour
+const sessionRefresh = 5 * 60 * 1000
 app.use(session({
   cookieName: 'session',
   secret: process.env.DATABASE_STRING,
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
+  duration: sessionExpiration,
+  activeDuration: sessionRefresh,
 }))
+// + unencrypted authToken set at /login route
+
 
 // initialize knex connection
 const Knex = require('knex')
@@ -45,16 +50,18 @@ app.use(bodyParser.json())
 // port
 const port = process.env.PORT || 3000
 
-// check sessions data
+// set sessions data
 app.use(async function(req, res, next) {
   if (req.session && req.session.user) {
     try {
       const user = await User
         .query()
         .findById(req.session.user.id)
+
       req.user = user // set req.user to req.session.user
       delete req.user.password_digest
       req.session.user = req.user  // refresh the session value
+
     } catch (er) {
       console.log(`error checking session data: ${er}`)
     }
@@ -66,7 +73,7 @@ app.use(async function(req, res, next) {
 
 app.use(router)
 
-// middleware functions
+// sessions authorization middleware functions
 function requireLogin (req, res, next) {
   if (!req.user) {
     res.send('No user logged in.')
@@ -96,7 +103,20 @@ router.post('/api/login',  function (req, res) {
     .then( (user) => {
       if ( user && bcrypt.compareSync(req.query.password, user.password_digest) ) {
         delete user.password_digest
+
+        // set session
         req.session.user = user
+        // set token for frontend redux store and conditional rendering
+        res.cookie("authToken", {
+          id: user.id,
+          username: user.username,
+          }, {
+          // if frontend expiration is desired:
+          // expires: new Date(Date.now() + sessionExpiration),
+          encode: String,
+          }
+        )
+
         res.send({
           id: user.id,
           username: user.username,
@@ -114,6 +134,7 @@ router.post('/api/login',  function (req, res) {
 
 router.post('/api/logout', requireLogin, function (req, res) {
   req.session.reset()
+  res.cookie("authToken", {id: null, username: null}, {encode: String})
   res.send({
     message: 'Logged out. Thank you.'
   })
@@ -214,6 +235,8 @@ router.get('/api/topvisitedurls', async function (req, res) {
 
 router.get('/*', async function (req, res) {
   const shortened = req.params[0]
+  try {
+
   let fullAddress = await Url.getFullAddress(shortened)
 
   if ( fullAddress.slice(0,4) !== "http" ) {
@@ -221,6 +244,10 @@ router.get('/*', async function (req, res) {
   }
 
   res.redirect(fullAddress)
+
+  } catch(er) {
+    res.send({error: "Something went wrong. Likely invalid URL to wildcard route. Please see logs."})
+  }
 })
 
 /////
