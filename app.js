@@ -41,7 +41,11 @@ import {
 import bcrypt from 'bcrypt'
 
 // allow cors
-app.use(cors()) // preflight POST & PATCH
+const corsOptions = {
+  'origin': true,
+  'credentials': true,
+}
+app.use(cors(corsOptions)) // preflight POST & PATCH
 
 // config bodyParser() for gathering POST data
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -233,7 +237,7 @@ router.get('/api/topvisitedurls', async function (req, res) {
   )
 })
 
-router.get('/*', async function (req, res) {
+router.get('*', async function (req, res) {
   const shortened = req.params[0]
   try {
 
