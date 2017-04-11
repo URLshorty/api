@@ -18,7 +18,8 @@ app.use(session({
   activeDuration: sessionRefresh,
 }))
 // + unencrypted authToken set at /login route
-
+const cookieParser = require('cookie-parser')
+app.use(cookieParser())
 
 // initialize knex connection
 const Knex = require('knex')
@@ -79,7 +80,12 @@ app.use(router)
 
 // sessions authorization middleware functions
 function requireLogin (req, res, next) {
-  if (!req.user) {
+  if (!req.user && req.cookies.authToken && req.cookies.authToken.user != null) {
+    // clear token
+    res.cookie("authToken", {id: null, username: null}, {encode: String})
+    res.send('Session expired.')
+  }
+  else if (!req.user) {
     res.send('No user logged in.')
   } else {
     next()
@@ -238,7 +244,7 @@ router.get('/api/topvisitedurls', async function (req, res) {
 })
 
 router.get('*', async function (req, res) {
-  const shortened = req.params[0]
+  const shortened = req.params[0].substring(1)
   try {
 
   let fullAddress = await Url.getFullAddress(shortened)
