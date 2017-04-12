@@ -145,7 +145,6 @@ export default class Url extends Model {
         .patch({
           visits: thisUserUrl.visits + 1
         })
-        console.log(thisUserUrl)
 
       // get full
       const urlArr = await this
@@ -165,6 +164,18 @@ export default class Url extends Model {
     } catch (er) {
       console.log(`error at Url::goToShortened: ${er}`)
       throw er
+    }
+  }
+
+  static async incrementByFullAddress(fullAddress) {
+    try {
+      let incremented = await Url
+        .query()
+        .where({address: fullAddress})
+        .increment('visits', 1)
+      return incremented
+    } catch (er) {
+      return er
     }
   }
 

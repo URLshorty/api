@@ -229,20 +229,29 @@ router.post('/api/urls', async function (req, res) {
 
 })
 
-router.get('/api/toprequestedurls', async function (req, res) {
+router.get('/api/most-shortened', async function (req, res) {
   res.send(
     await
       Url.getMostRequested(10, ['id', 'address', 'requests'])
   )
 })
 
-router.get('/api/topvisitedurls', async function (req, res) {
+router.get('/api/most-visited', async function (req, res) {
   res.send(
     await
       Url.getMostVisited(10, ['id', 'address', 'visits'])
   )
 })
 
+// route for incrementing long-form addresses clicked on directly
+router.post('/api/increment', async function (req, res) {
+  const address = req.query.address
+  await
+    Url.incrementByFullAddress(address)
+  res.sendStatus(200)
+})
+
+// redirect shortened urls
 router.get('*', async function (req, res) {
   const shortened = req.params[0].substring(1)
   try {
