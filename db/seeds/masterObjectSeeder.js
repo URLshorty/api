@@ -1,4 +1,6 @@
-// run this to seed with Objection
+// yarn seed
+
+// refactor as transaction
 
 ///////////////////////////// knex setup (abstract this)
 
@@ -20,6 +22,8 @@
   } from '../../models'
 
 /////////////////////////////
+
+import bcrypt from 'bcrypt'
 
 // clear all tables
 let clearData = async () => {
@@ -69,7 +73,7 @@ let setData = async () => {
         .create({
           username: 'Jennifer',
           email: `jennifer@gmail.com`,
-          password_digest: "j"
+          password: bcrypt.hashSync("p", 10)
         })
 
     let alex = await
@@ -77,7 +81,7 @@ let setData = async () => {
         .create({
           username: 'Alex',
           email: `alex@gmail.com`,
-          password_digest: "a"
+          password: bcrypt.hashSync("p", 10)
         })
 
     let rohan = await
@@ -85,7 +89,7 @@ let setData = async () => {
         .create({
           username: 'Rohan',
           email: `rohan@gmail.com`,
-          password_digest: "r",
+          password: bcrypt.hashSync("p", 10),
           is_admin: 1
         })
 
@@ -94,7 +98,7 @@ let setData = async () => {
         .create({
           username: 'Eric',
           email: `eric@gmail.com`,
-          password_digest: "e"
+          password: bcrypt.hashSync("p", 10)
         })
 
     let beck = await
@@ -102,9 +106,24 @@ let setData = async () => {
         .create({
           username: 'Beck',
           email: `beck@gmail.com`,
-          password_digest: "b",
+          password: bcrypt.hashSync("p", 10),
           is_admin: 1
         })
+
+  // set alphaNumeric shotened url form start value
+  let starterId = await Url
+    .query()
+    .insert({
+      address: "starter"
+    })
+    .then(x=>x.id)
+  await User_Url
+    .query()
+    .insert({
+      user_id: null,
+      url_id: starterId,
+      shortened: "0000",
+    })
 
   // users add urls
     let google = await jennifer.createUrl('www.google.com').then((x)=>x)

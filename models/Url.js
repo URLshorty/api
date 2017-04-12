@@ -76,8 +76,10 @@ export default class Url extends Model {
       const newUrl = await this
         .query()
         .insert({
-          address: address
+          address: address,
+          requests: 1,
         })
+
       if (newUrl && next) {
         newUserUrl = await User_Url
           .query()
@@ -89,7 +91,7 @@ export default class Url extends Model {
       }
       console.log(`new URL created: ${newUrl.address}`)
       return {
-        newUrl: newUrl,
+        url: newUrl,
         newUserUrl: newUserUrl,
       }
     } catch (er) {
@@ -199,10 +201,16 @@ export default class Url extends Model {
 
       // increment requests on url
       await this.$query()
-        .increment("requests", 1)
+        .increment("requests", 1) //*
 
       console.log(`shortened: ${user_url}`)
-      return {newUserUrl: user_url}
+      return {
+        url: {...this,
+          // *fix this during transaction refactor
+          requests: this.requests + 1
+        },
+        newUserUrl: user_url,
+      }
     } catch (er) {
       let message = `error at Url::getNewShortened: ${er}`
       console.log(message)

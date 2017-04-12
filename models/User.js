@@ -1,5 +1,8 @@
 import { Model } from 'objection'
 import bcrypt from 'bcrypt'
+import {
+  Url
+} from './'
 
 export default class User extends Model {
   // Table name is the only required property.
@@ -75,10 +78,9 @@ export default class User extends Model {
 
   async createUrl(url) {
     try {
-      const newUrl = await this
-        .$relatedQuery('urls')
-        .insert({address: url})
-      console.log(`${this.username} created ${newUrl.address}`)
+      const newUrl = await Url
+        .create(url, this)
+      console.log(`${this.username} created ${newUrl.url.address}`)
       return newUrl
     } catch (er) {
       console.log(`error at user#createUrl: ${er}`)
