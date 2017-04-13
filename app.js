@@ -122,12 +122,10 @@ router.post('/api/login',  function (req, res) {
           id: user.id,
           username: user.username,
           }, {
-          // if frontend expiration is desired:
-          // expires: new Date(Date.now() + sessionExpiration),
+          credentials: 'include',
           encode: String,
           }
         )
-
         res.send({
           id: user.id,
           username: user.username,
@@ -145,7 +143,13 @@ router.post('/api/login',  function (req, res) {
 
 router.post('/api/logout', requireLogin, function (req, res) {
   req.session.reset()
-  res.cookie("authToken", {id: null, username: null}, {encode: String})
+  res.cookie("authToken", {
+    id: null,
+    username: null,
+  }, {
+    credentials: 'include',
+    encode: String,
+  })
   res.send({
     message: 'Logged out. Thank you.'
   })
