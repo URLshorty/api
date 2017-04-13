@@ -109,8 +109,9 @@ router.get('/', function (req, res) {
 router.post('/api/login',  function (req, res) {
   User
     .query()
-    .findById(req.query.id)
-    .then( (user) => {
+    .where('username', req.query.username)
+    .then( (u) => {
+      let user = u[0]
       if ( user && bcrypt.compareSync(req.query.password, user.password_digest) ) {
         delete user.password_digest
 

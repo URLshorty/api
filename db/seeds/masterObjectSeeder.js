@@ -73,7 +73,7 @@ let setData = async () => {
         .create({
           username: 'Jennifer',
           email: `jennifer@gmail.com`,
-          password: bcrypt.hashSync("p", 10)
+          password: "p"
         })
 
     let alex = await
@@ -81,7 +81,7 @@ let setData = async () => {
         .create({
           username: 'Alex',
           email: `alex@gmail.com`,
-          password: bcrypt.hashSync("p", 10)
+          password: "p"
         })
 
     let rohan = await
@@ -89,7 +89,7 @@ let setData = async () => {
         .create({
           username: 'Rohan',
           email: `rohan@gmail.com`,
-          password: bcrypt.hashSync("p", 10),
+          password: "p",
           is_admin: 1
         })
 
@@ -98,7 +98,7 @@ let setData = async () => {
         .create({
           username: 'Eric',
           email: `eric@gmail.com`,
-          password: bcrypt.hashSync("p", 10)
+          password: "p"
         })
 
     let beck = await
@@ -106,7 +106,7 @@ let setData = async () => {
         .create({
           username: 'Beck',
           email: `beck@gmail.com`,
-          password: bcrypt.hashSync("p", 10),
+          password: "p",
           is_admin: 1
         })
 
