@@ -82,7 +82,13 @@ app.use(router)
 function requireLogin (req, res, next) {
   if (!req.user && req.cookies.authToken && req.cookies.authToken.user != null) {
     // clear token
-    res.cookie("authToken", {id: null, username: null}, {encode: String})
+    res.cookie("authToken", {
+      id: null,
+      username: null,
+      is_admin: null,
+    }, {
+      encode: String
+    })
     res.send('Session expired.')
   }
   else if (!req.user) {
@@ -121,6 +127,7 @@ router.post('/api/login',  function (req, res) {
         res.cookie("authToken", {
           id: user.id,
           username: user.username,
+          is_admin: user.is_admin,
           }, {
           credentials: 'include',
           encode: String,
@@ -146,6 +153,7 @@ router.post('/api/logout', requireLogin, function (req, res) {
   res.cookie("authToken", {
     id: null,
     username: null,
+    is_admin: null,
   }, {
     credentials: 'include',
     encode: String,
@@ -175,7 +183,6 @@ router.post('/api/users', function (req, res) {
     )
 })
 
-// add retrieval of related most visited url and shortened version
 router.get('/api/users/:id', function (req, res) {
   User
     .query()
@@ -186,6 +193,9 @@ router.get('/api/users/:id', function (req, res) {
         res.send({
           id: user.id,
           username: user.username,
+          email: user.email,
+          created_at: user.created_at,
+          is_admin: user.is_admin,
         })
       } else {
         res.send({error: 'User not found.'})
