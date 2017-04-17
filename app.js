@@ -57,6 +57,7 @@ const port = process.env.PORT || 3000
 
 // set sessions data
 app.use(async function(req, res, next) {
+
   if (req.session && req.session.user) {
     try {
       const user = await User
@@ -70,6 +71,7 @@ app.use(async function(req, res, next) {
     } catch (er) {
       console.log(`error checking session data: ${er}`)
     }
+
     next()
   } else {
     next()
@@ -89,10 +91,10 @@ function requireLogin (req, res, next) {
     }, {
       encode: String
     })
-    res.send('Session expired.')
+    res.send({error: 'Session expired.'})
   }
   else if (!req.user) {
-    res.send('No user logged in.')
+    res.send({error: 'No user logged in.'})
   } else {
     next()
   }
@@ -103,6 +105,26 @@ function authorizeLogin (req, res, next) {
     next()
   } else {
     res.send('This user is not authorized for this request.')
+  }
+}
+
+function optionalLogin (req, res, next) {
+  console.log("ASDF: "+JSON.stringify(req.user))
+  if ( !req.user &&
+        req.cookies.authToken &&
+        req.cookies.authToken.id ) {
+    // clear token
+    res.cookie("authToken", {
+      id: null,
+      username: null,
+      is_admin: null,
+    }, {
+      credentials: 'include',
+      encode: String,
+    })
+    res.send({error: "Session expired."})
+  } else {
+    next()
   }
 }
 
@@ -206,11 +228,12 @@ router.get('/api/users/:id', function (req, res) {
 
 
 router.patch('/api/users/:id', requireLogin, authorizeLogin, async function (req, res) {
-  // research strong parameters - allows invalid fields!!
+  // research strong parameters
   User.query()
     .patchAndFetchById(req.params.id, req.query)
     .then( ( user ) => {
       if ( user ) {
+        delete user.password_digest
         res.send( user )
       } else {
         res.send({error: 'User not found.'})
@@ -220,14 +243,14 @@ router.patch('/api/users/:id', requireLogin, authorizeLogin, async function (req
 })
 
 // URLS
-router.post('/api/urls', async function (req, res) {
+router.post('/api/urls', optionalLogin, async function (req, res) {
   let address = req.query.address
 
     try {
     // check if URL record already exists
       let urlArr = await Url.query().where({address: address})
       if (urlArr.length) {
-        // req.user undefined if no user
+        // req.user undefined for NULL if no user
         urlArr[0].getNewShortened(req.user)
           .then(
             (url) => res.send(url)
