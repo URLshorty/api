@@ -56,7 +56,7 @@ app.use(bodyParser.json())
 const port = process.env.PORT || 3000
 
 // set sessions data
-app.use(async function(req, res, next) {
+const setSessionData = async function(req, res, next) {
 
   if (req.session && req.session.user) {
     try {
@@ -76,12 +76,13 @@ app.use(async function(req, res, next) {
   } else {
     next()
   }
-})
+}
+app.use(setSessionData)
 
 app.use(router)
 
 // sessions authorization middleware functions
-function requireLogin (req, res, next) {
+const requireLogin = function(req, res, next) {
   if (!req.user && req.cookies.authToken && req.cookies.authToken.user != null) {
     // clear token
     res.cookie("authToken", {
@@ -100,7 +101,7 @@ function requireLogin (req, res, next) {
   }
 }
 
-function authorizeLogin (req, res, next) {
+const authorizeLogin = function(req, res, next) {
   if ( req.user.id === parseInt(req.params.id) ) {
     next()
   } else {
@@ -108,7 +109,7 @@ function authorizeLogin (req, res, next) {
   }
 }
 
-function optionalLogin (req, res, next) {
+const optionalLogin = function(req, res, next) {
   console.log("ASDF: "+JSON.stringify(req.user))
   if ( !req.user &&
         req.cookies.authToken &&
@@ -189,18 +190,24 @@ router.post('/api/logout', requireLogin, function (req, res) {
 router.post('/api/users', function (req, res) {
   User
     .create({
-      ...req.query,
-      is_admin: parseInt(req.query.is_admin),
+      ...req.body,
+      is_admin: parseInt(req.body.is_admin),
     })
     .then(
-      (user) => res.send({
-        id: user.id,
-        username: user.username,
-      })
+      (user) => {
+        res.send({
+          id: user.id,
+          username: user.username,
+          is_admin: user.is_admin,
+          email: user.email,
+        })
+      // currently frontend handles second login req
+      // consider also login handler ahead of this and login routes
+      }
     )
     .catch(
       (er) => {
-        res.send(er)
+        res.send({error: JSON.stringify(er)})
       }
     )
 })
