@@ -95,13 +95,20 @@ export default class User extends Model {
         .where('user_id', this.id)
         .orderBy('visits', 'desc')
       let short = shortArr[0]
-      let longArr = await Url
-        .query()
-        .where('id', short.url_id)
-      let long = longArr[0]
-      return {
-        longAddress: long.address,
-        shortAddress: short.shortened,
+      if (short) {
+        let longArr = await Url
+          .query()
+          .where('id', short.url_id)
+        let long = longArr[0]
+        return {
+          longAddress: long.address,
+          shortAddress: short.shortened,
+        }
+      } else {
+        return {
+          longAddress: null,
+          shortAddress: null,
+        }
       }
     } catch (er) {
       console.log(`error at user#getMostPopular: ${er}`)

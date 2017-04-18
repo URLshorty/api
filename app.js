@@ -241,6 +241,16 @@ router.patch('/api/users/:id', requireLogin, authorizeLogin, async function (req
     .then( ( user ) => {
       if ( user ) {
         delete user.password_digest
+        // reset cookie in case of username change
+        res.cookie("authToken", {
+          id: user.id,
+          username: user.username,
+          is_admin: user.is_admin,
+          }, {
+          credentials: 'include',
+          encode: String,
+          }
+        )
         res.send( user )
       } else {
         res.send({error: 'User not found.'})
