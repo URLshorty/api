@@ -12,12 +12,11 @@ export default class Url extends Model {
   // Table name is the only required property.
   static get tableName() {
     // name of table in db
-    return 'urls';
+    return 'urls'
   }
 
-  // This is not the database schema! Nothing is This is only used for
-  // validation. Whenever a model instance is created it is checked against
-  // this schema. http://json-schema.org/.
+  // Not the database schema! Only validation during
+  // instantiation http://json-schema.org/
   static get jsonSchema() {
     return {
       type: 'object',
@@ -128,7 +127,7 @@ export default class Url extends Model {
     }
   }
 
-  // research db transactions implementations for getFullAddress() and getNewShortened()
+  // implement for getFullAddress() and getNewShortened()
 
   static async getFullAddress(short_address) {
     try {

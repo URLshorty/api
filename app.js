@@ -110,7 +110,7 @@ const authorizeLogin = function(req, res, next) {
 }
 
 const optionalLogin = function(req, res, next) {
-  console.log("ASDF: "+JSON.stringify(req.user))
+
   if ( !req.user &&
         req.cookies.authToken &&
         req.cookies.authToken.id ) {
@@ -212,25 +212,25 @@ router.post('/api/users', function (req, res) {
     )
 })
 
-router.get('/api/users/:id', function (req, res) {
-  User
-    .query()
-    .findById(req.params.id)
-    .then( (user) => {
-      if ( user ) {
-        // get most visited goes here
-        res.send({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          created_at: user.created_at,
-          is_admin: user.is_admin,
-        })
-      } else {
-        res.send({error: 'User not found.'})
-      }
+router.get('/api/users/:id', async function (req, res) {
+  try {
+    let user = await User
+        .query()
+        .findById(req.params.id)
+    let mostPopular = await user.getMostPopular()
+    res.send({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      created_at: user.created_at,
+      is_admin: user.is_admin,
+      mostPopularShort: mostPopular.shortAddress,
+      mostPopularLong:  mostPopular.longAddress,
     })
-    .catch( (er) => res.send(er) )
+  } catch (er) {
+    console.log(er)
+    res.send({error: 'User not found.'})
+  }
 })
 
 

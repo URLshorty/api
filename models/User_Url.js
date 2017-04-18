@@ -4,12 +4,11 @@ export default class User_Url extends Model {
   // Table name is the only required property.
   static get tableName() {
     // name of table in db
-    return 'user_urls';
+    return 'user_urls'
   }
 
-  // This is not the database schema! Nothing is This is only used for
-  // validation. Whenever a model instance is created it is checked against
-  // this schema. http://json-schema.org/.
+  // Not the database schema! Only validation during
+  // instantiation http://json-schema.org/
   static get jsonSchema() {
     return {
       type: 'object',

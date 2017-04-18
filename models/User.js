@@ -1,6 +1,7 @@
 import { Model } from 'objection'
 import bcrypt from 'bcrypt'
 import {
+  User_Url,
   Url
 } from './'
 
@@ -8,12 +9,11 @@ export default class User extends Model {
   // Table name is the only required property.
   static get tableName() {
     // name of table in db
-    return 'users';
+    return 'users'
   }
 
-  // This is not the database schema! Nothing is This is only used for
-  // validation. Whenever a model instance is created it is checked against
-  // this schema. http://json-schema.org/.
+  // Not the database schema! Only validation during
+  // instantiation http://json-schema.org/
   static get jsonSchema() {
     return {
       type: 'object',
@@ -84,7 +84,28 @@ export default class User extends Model {
       return newUrl
     } catch (er) {
       console.log(`error at user#createUrl: ${er}`)
-      return `error creating URL: ${er}`
+      throw er
+    }
+  }
+
+  async getMostPopular() {
+    try {
+      let shortArr = await User_Url
+        .query()
+        .where('user_id', this.id)
+        .orderBy('visits', 'desc')
+      let short = shortArr[0]
+      let longArr = await Url
+        .query()
+        .where('id', short.url_id)
+      let long = longArr[0]
+      return {
+        longAddress: long.address,
+        shortAddress: short.shortened,
+      }
+    } catch (er) {
+      console.log(`error at user#getMostPopular: ${er}`)
+      throw er
     }
   }
 
