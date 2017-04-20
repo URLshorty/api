@@ -232,6 +232,7 @@ router.get('/api/users/:id', async function (req, res) {
       is_admin: user.is_admin,
       mostPopularShort: mostPopular.shortAddress,
       mostPopularLong:  mostPopular.longAddress,
+      picture_id: user.picture_id,
     })
   } catch (er) {
     console.log(er)
@@ -239,34 +240,50 @@ router.get('/api/users/:id', async function (req, res) {
   }
 })
 
-// <img src="http://localhost:3000/uploads/1241a78f464b4635ce31142925b581b9">
-
 router.patch('/api/users/:id', requireLogin, authorizeLogin, upload.single('file'), async function (req, res) {
-  console.log(req, 'req');
-  console.log(req.file.mimetype, 'file');
-  // research strong parameters, unspecified
-  // params will not add but modified date will update
-  User.query()
-    .patchAndFetchById(req.params.id, req.query)
-    .then( ( user ) => {
-      if ( user ) {
-        delete user.password_digest
-        // reset cookie in case of username change
-        res.cookie("authToken", {
-          id: user.id,
-          username: user.username,
-          is_admin: user.is_admin,
-          }, {
-          credentials: 'include',
-          encode: String,
-          }
-        )
-        res.send( user )
-      } else {
-        res.send({error: 'User not found.'})
-      }
-    })
-    .catch( (er) => res.send(er) )
+  // research strong parameters
+
+  // picture file attachted
+  if ( !!req.file ) {
+    User.query()
+      .patchAndFetchById(req.params.id, {
+        picture_id: req.file.filename
+      })
+      .then( ( user ) => {
+        if ( user ) {
+          res.send({
+            picture_id: user.picture_id
+          })
+        } else {
+          res.send({error: 'Something went wrong with this upload.'})
+        }
+      })
+      .catch( (er) => res.send(er) )
+  } else {
+  // update queries
+    User.query()
+      .patchAndFetchById(req.params.id, req.query)
+      .then( ( user ) => {
+        if ( user ) {
+          delete user.password_digest
+          // reset cookie in case of username change
+          res.cookie("authToken", {
+            id: user.id,
+            username: user.username,
+            is_admin: user.is_admin,
+            }, {
+            credentials: 'include',
+            encode: String,
+            }
+          )
+          res.send( user )
+        } else {
+          res.send({error: 'User not found.'})
+        }
+      })
+      .catch( (er) => res.send(er) )
+  }
+
 })
 
 // URLS
@@ -303,6 +320,7 @@ router.get('/api/most-shortened', async function (req, res) {
 
 router.get('/api/most-visited', async function (req, res) {
   res.send(
+    // rewrite as promise if polling
     await
       Url.getMostVisited(10, ['id', 'address', 'visits'])
   )
