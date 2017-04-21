@@ -85,7 +85,7 @@ app.use(setSessionData)
 
 // sessions authorization middleware functions
 const requireLogin = function(req, res, next) {
-  if (!req.user && req.cookies.authToken && req.cookies.authToken.user != null) {
+  if (!req.user && req.cookies.authToken && req.cookies.authToken.id != null) {
     // clear token
     res.cookie("authToken", {
       id: null,
@@ -243,7 +243,7 @@ router.get('/api/users/:id', async function (req, res) {
 router.patch('/api/users/:id', requireLogin, authorizeLogin, upload.single('file'), async function (req, res) {
   // research strong parameters
 
-  // picture file attachted
+  // picture file attached
   if ( !!req.file ) {
     User.query()
       .patchAndFetchById(req.params.id, {
