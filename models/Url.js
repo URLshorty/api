@@ -71,7 +71,8 @@ export default class Url extends Model {
         .select('shortened')
         .orderBy('id','desc')
         .limit(1)
-      const next = alphaNumIncrementer(previous[0].shortened)
+      const next = !!previous[0] ? alphaNumIncrementer(previous[0].shortened) : "0000"
+
       const newUrl = await this
         .query()
         .insert({

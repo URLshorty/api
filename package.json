@@ -9,7 +9,8 @@
   "scripts": {
     "seed": "node -r babel-register -r babel-polyfill db/seeds/masterObjectSeeder.js",
     "test": "mocha",
-    "start": "nodemon --exec 'node -r babel-register -r babel-polyfill app.js'",
+    "start": "NODE_ENV=production node -r babel-register -r babel-polyfill app.js",
+    "startD": "NODE_ENV=development nodemon --exec 'node -r babel-register -r babel-polyfill app.js'",
     "setupEnv": "node config/setup.js",
     "co": "node -r babel-register -r babel-polyfill contextREPL.js",
     "cr": "nodemon --exec 'node -r babel-register -r babel-polyfill contextREPL.js'",
@@ -27,6 +28,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-2": "^6.22.0",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "client-sessions": "^0.7.0",

@@ -1,11 +1,22 @@
 require('dotenv').config()
 
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const router = express.Router()
-const cors = require('cors')
 const bodyParser = require('body-parser')
 const multer  = require('multer')
+
+// trust Heroku's 'Vegur' proxy
+app.enable('trust proxy')
+
+// allow cors
+const corsOptions = {
+  'origin': true,
+  'credentials': true,
+}
+app.options('*', cors(corsOptions))
+app.use(cors(corsOptions))
 
 // authentication
 const session = require('client-sessions')
@@ -14,9 +25,12 @@ const sessionExpiration = 4 * 60 * 60 * 1000 // 4 hour
 const sessionRefresh = 5 * 60 * 1000
 app.use(session({
   cookieName: 'session',
-  secret: process.env.DATABASE_STRING,
+  secret: process.env.SESSION_SECRET,
   duration: sessionExpiration,
   activeDuration: sessionRefresh,
+  cookie: {
+    secureProxy: true
+  }
 }))
 // + unencrypted authToken set at /login route
 const cookieParser = require('cookie-parser')
@@ -41,13 +55,6 @@ import {
 
 // bcrypt
 import bcrypt from 'bcrypt'
-
-// allow cors
-const corsOptions = {
-  'origin': true,
-  'credentials': true,
-}
-app.use(cors(corsOptions)) // preflight POST & PATCH
 
 // config bodyParser() for gathering POST data
 app.use(bodyParser.urlencoded({ extended: true }))
