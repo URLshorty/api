@@ -29,7 +29,7 @@ app.use(session({
   duration: sessionExpiration,
   activeDuration: sessionRefresh,
   cookie: {
-    secureProxy: true
+    secureProxy: true // <- remove to test locally
   }
 }))
 // + unencrypted authToken set at /login route
@@ -339,6 +339,33 @@ router.post('/api/increment', async function (req, res) {
   await
     Url.incrementByFullAddress(address)
   res.sendStatus(200)
+})
+
+// route for presenting the database
+router.get('/api/db', async function (req, res) {
+  Promise.all([
+      Url.query()
+         .then(urls => ({URLS: urls})),
+      User_Url.query()
+              .then(user_urls => ({USER_URLS: user_urls})),
+      User.query()
+          .then(users => ({USERS: users})),
+    ])
+    .then(db => {
+      let dbObj = db.reduce((obj, table) => {
+        let key = Object.keys(table)[0]
+        obj[key] = table[key]
+        return obj
+      }, {})
+
+      res.send(dbObj)
+    })
+    .catch(er => res.send(er))
+})
+
+// favicon 404
+router.get('/favicon.ico', async function (req, res) {
+  res.status(404).send('API does not provide favicon.')
 })
 
 // redirect shortened urls
