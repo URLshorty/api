@@ -6,6 +6,18 @@
 
 Welcome to the **URLshorty API** at <https://url-shorty-api.herokuapp.com/>, a consumable API for URL shortening with optional user features.
 
+## Table of Contents
+
+1. [Example](#example)
+1. [Schema](#schema)
+1. [User Features](#user-features)
+1. [Endpoints](#end-points)
+    1. [Sessions](#sessions)
+    1. [Users](#users)
+    1. [Urls](#urls)
+1. [Development](#development)
+1. [About](#about)
+
 ## Example
 
 A POST request sent to the following URL shortening endpoint:
@@ -43,7 +55,6 @@ The `newUserUrl` key of the returned JSON object represents the *shortened versi
 
 URLshorty also supports features for logged in users with HTTPS connections. If a user had been logged in during the above example, then the `user_id` key in `newUserUrl` would be set to that user's ID. When there is no user logged in, like above, then the creator is considered anonymous and the `user_id` is set to `null`.
 
-
 ## Schema
 
 ![DB schema](https://raw.githubusercontent.com/URLshorty/api/master/DB%20Schem.png)
@@ -61,38 +72,30 @@ This is so that links to the long-form address that are made directly from a fro
 The cors-enabled URLshorty API supports user features such as sign/log in and out, and the storing of user data. Since these features rely on secure cookies, in order to use them, an consuming application must meet the following two conditions:
 
 1. HTTPS is required
-2. Credentials must be included in requests to endpoints that require or allow users to be logged in (see: [Endpoints](#endpoints))
+2. Credentials must be included in requests to endpoints that require or allow users to be logged in (see: Endpoints)
 
 User sessions expire after **4 hours** without requests to the server.
-
 
 ## Endpoints
 
 *__\* login required__*, *__\*\* login optional__*, *__\*\*\* login and authorization required__*
 
-
-**SESSIONS**
-
---
+### SESSIONS
 
 **POST** `/api/login?username=Joe&password=JoesPassword`
 
 **POST** `/api/logout` **\***
 
-**USERS**
+### USERS
 
---
-
-**POST** `/api/users`
-
-REQUIRED BODY
+**POST** `/api/users` <- body required:
 
 ```json
 {
-    username: "Sarah",
-    password: "SarahsPassword",
-    email: "sarah1988@gmail.com",
-    is_admin: "0",
+  "username": "Sarah",
+  "password": "SarahsPassword",
+  "email": "sarah1988@gmail.com",
+  "is_admin": "0",
 }
 ```
 
@@ -104,9 +107,7 @@ REQUIRED BODY
 
 **PATCH** In addition to a user's email or username being updatable at the above `PATCH` route, a user's profile picture may be added or updated at that route as well by adding a `FormData` body to the request that is appended with a key called `file` and it's value of a picture object such as from [react-dropzone](https://react-dropzone.netlify.com/) used at <https://url5horty.herokuapp.com/>.
 
-**URLS**
-
---
+### URLS
 
 **POST** `/api/urls?address=www.thisurlistoolong.com` **\****
 
@@ -119,6 +120,26 @@ REQUIRED BODY
 **GET** `/api/shortenedvalue`
 
 **NOTE:** The final `GET` route above is the redirect to the desired long-form web address that has been shortened. Finally, the API will return a 404 for a favicon request.
+
+## Development
+
+```sh
+// install dependencies
+yarn
+
+// create .env file template, fill in
+// to connect to PostgreSQL database
+yarn setupEnv
+
+// optional: seed database
+yarn seed
+
+// start development
+yarn startD
+
+// app-context REPL
+yarn co
+```
 
 ## About
 
