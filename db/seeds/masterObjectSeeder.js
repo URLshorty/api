@@ -114,7 +114,7 @@ let setData = async () => {
   let starterId = await Url
     .query()
     .insert({
-      address: "starter"
+      address: "www.wikipedia.org"
     })
     .then(x=>x.id)
   await User_Url
@@ -126,36 +126,30 @@ let setData = async () => {
     })
 
   // users add urls
-    let google = await jennifer.createUrl('www.google.com').then((x)=>x)
-    let yahoo = await alex.createUrl('www.yahoo.com').then((x)=>x)
-    let bing = await rohan.createUrl('www.bing.com').then((x)=>x)
-    let reddit = await eric.createUrl('www.reddit.com').then((x)=>x)
-    let bookstore = await beck.createUrl('www.bookstore.com').then((x)=>x)
-    let homedepot = await jennifer.createUrl('www.homedepot.com').then((x)=>x)
-    let loews = await alex.createUrl('www.loews.com').then((x)=>x)
-    let stopandshop = await rohan.createUrl('www.stopandshop.com').then((x)=>x)
-    let flourist = await eric.createUrl('www.flourist.com').then((x)=>x)
-    let peapod = await beck.createUrl('www.peapod.com').then((x)=>x)
-    let spaceships = await jennifer.createUrl('www.spaceships.com').then((x)=>x)
-    let golfsupplies = await alex.createUrl('www.golfsupplies.com').then((x)=>x)
-    let ufosightings = await rohan.createUrl('www.ufosightings.com').then((x)=>x)
-    let horseshoes = await eric.createUrl('www.horseshoes.com').then((x)=>x)
-    let rainbows = await beck.createUrl('www.rainbows.com').then((x)=>x)
-    let clovers = await jennifer.createUrl('www.clovers.com').then((x)=>x)
-    let gardensupply = await alex.createUrl('www.gardensupply.com').then((x)=>x)
-    let dmotorvehicles = await rohan.createUrl('www.dmotorvehicles.com').then((x)=>x)
-    let universitybooks = await eric.createUrl('www.universitybooks.com').then((x)=>x)
-    let baskinrobins = await beck.createUrl('www.baskinrobins.com').then((x)=>x)
+    let youtube = await jennifer.createUrl('www.youtube.com')
+    let boardgamegeek = await alex.createUrl('www.boardgamegeek.com')
+    let github = await rohan.createUrl('www.github.com')
+    let reddit = await eric.createUrl('www.reddit.com')
+    let homedepot = await beck.createUrl('www.homedepot.com')
+    await jennifer.createUrl('stackoverflow.com')
+    await alex.createUrl('www.imdb.com')
+
+    await Url.create('www.stopandshop.com')
+    await Url.create('www.craigslist.com')
+    await Url.create('www.1800flowers.com')
+    await Url.create('www.peapod.com')
+    await Url.create('www.lehighvalley.org')
+    await Url.create('www.newyorktimes.com')
 
   // set users' 'most visited urls'
   await
     jennifer
       .$query()
       .patchAndFetch({
-        most_visited_url_id: google.id
+        most_visited_url_id: youtube.id
       })
       .then((d) => {
-        console.log("jennifer's most visited set to google")
+        console.log("jennifer's most visited set to youtube")
       })
       .catch((er) => {
         console.log(er)
@@ -165,10 +159,10 @@ let setData = async () => {
     alex
       .$query()
       .patchAndFetch({
-        most_visited_url_id: yahoo.id
+        most_visited_url_id: boardgamegeek.id
       })
       .then((d) => {
-        console.log("alex's most visited set to yahoo")
+        console.log("alex's most visited set to boardgamegeek")
       })
       .catch((er) => {
         console.log(er)
@@ -178,10 +172,10 @@ let setData = async () => {
     rohan
       .$query()
       .patchAndFetch({
-        most_visited_url_id: bing.id
+        most_visited_url_id: github.id
       })
       .then((d) => {
-        console.log("rohan's most visited set to bing")
+        console.log("rohan's most visited set to github")
       })
       .catch((er) => {
         console.log(er)
