@@ -1,4 +1,4 @@
-## URLshorty API
+# URLshorty API
 #
 ![URLShorty icon](https://avatars0.githubusercontent.com/u/26073951?v=3&s=200)
 #
@@ -46,7 +46,7 @@ URLshorty also supports features for logged in users with HTTPS connections. If 
 
 ## Schema
 
-![DB schema](https://i.imgur.com/7zDQdRQ.png)
+![DB schema](https://raw.githubusercontent.com/URLshorty/api/master/DB%20Schem.png)
 
 A `user_url` is a record representing each individual shortened version of a long-form URL. Each short version may have its own click count - `user_urls.visits` - which are tallied in the long-form's total count - `urls.visits`.
 
@@ -70,15 +70,18 @@ User sessions expire after **4 hours** without requests to the server.
 
 *__\* login required__*, *__\*\* login optional__*, *__\*\*\* login and authorization required__*
 
-#####SESSIONS
+
+**SESSIONS**
+
 --
 
 **POST** `/api/login?username=Joe&password=JoesPassword`
 
 **POST** `/api/logout` **\***
-#####USERS
---
 
+**USERS**
+
+--
 
 **POST** `/api/users`
 
@@ -91,7 +94,7 @@ REQUIRED BODY
     email: "sarah1988@gmail.com",
     is_admin: "0",
 }
-````
+```
 
 **GET** `/api/user/:id`
 
@@ -100,7 +103,9 @@ REQUIRED BODY
 **PATCH** `/api/user/:id?email=alex@gmail.com` **\*****
 
 **PATCH** In addition to a user's email or username being updatable at the above `PATCH` route, a user's profile picture may be added or updated at that route as well by adding a `FormData` body to the request that is appended with a key called `file` and it's value of a picture object such as from [react-dropzone](https://react-dropzone.netlify.com/) used at <https://url5horty.herokuapp.com/>.
-#####URLS
+
+**URLS**
+
 --
 
 **POST** `/api/urls?address=www.thisurlistoolong.com` **\****
