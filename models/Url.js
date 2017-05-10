@@ -65,7 +65,7 @@ export default class Url extends Model {
     user ? userId = user.id : userId = null
     try {
       let newUserUrl
-      // new short url
+      // next short url string
       const previous = await User_Url
         .query()
         .select('shortened')
@@ -78,8 +78,10 @@ export default class Url extends Model {
         .insert({
           address: address,
           requests: 1,
+          visits: 0,
         })
 
+      // this must be a transaction - rewrite
       if (newUrl && next) {
         newUserUrl = await User_Url
           .query()
@@ -193,7 +195,7 @@ export default class Url extends Model {
         currUserId = currUserArr[0].id
       }
 
-      // new short url
+      // next short url string
       const previous = await User_Url
         .query()
         .select('shortened')
@@ -207,7 +209,7 @@ export default class Url extends Model {
         .insert({
           user_id: currUserId,
           url_id: this.id,
-          shortened: next
+          shortened: next,
         })
 
       // increment requests on url

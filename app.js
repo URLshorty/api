@@ -144,7 +144,8 @@ app.use(router)
 
 ///// ROUTES
 router.get('/', function (req, res) {
-  res.send('check check 1 2, this is root path of the api, where the docs will go')
+  res.send('Welcome to the URLshorty API. \
+    Click <a href="https://github.com/URLshorty/api">here</a> to learn more.')
 })
 
 // SESSIONS
@@ -319,17 +320,19 @@ router.post('/api/urls', optionalLogin, async function (req, res) {
 })
 
 router.get('/api/most-shortened', async function (req, res) {
+  let limit = req.query.limit
   res.send(
     await
-      Url.getMostRequested(10, ['id', 'address', 'requests'])
+      Url.getMostRequested(limit, ['id', 'address', 'requests'])
   )
 })
 
 router.get('/api/most-visited', async function (req, res) {
+  let limit = req.query.limit
   res.send(
     // rewrite as promise if polling
     await
-      Url.getMostVisited(10, ['id', 'address', 'visits'])
+      Url.getMostVisited(limit, ['id', 'address', 'visits'])
   )
 })
 
