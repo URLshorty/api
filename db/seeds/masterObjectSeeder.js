@@ -125,87 +125,134 @@ let setData = async () => {
       shortened: "0000",
     })
 
-  // users add urls
-    let youtube = await jennifer.createUrl('www.youtube.com')
-    let boardgamegeek = await alex.createUrl('www.boardgamegeek.com')
-    let github = await rohan.createUrl('www.github.com')
-    let reddit = await eric.createUrl('www.reddit.com')
-    let homedepot = await beck.createUrl('www.homedepot.com')
-    await jennifer.createUrl('stackoverflow.com')
-    await alex.createUrl('www.imdb.com')
+  // create urls and user_urls, and add visits
+  //github
+  await rohan.createUrl('www.github.com')
+  let github = await Url.query()
+           .where('address', 'www.github.com')
+           .then(arr => {
+              return arr[0]
+           })
+  let short = await github.getNewShortened(beck)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
 
-    await Url.create('www.stopandshop.com')
-    await Url.create('www.craigslist.com')
-    await Url.create('www.1800flowers.com')
-    await Url.create('www.peapod.com')
-    await Url.create('www.lehighvalley.org')
-    await Url.create('www.newyorktimes.com')
+  short = await github.getNewShortened(eric)
+  await Url.getFullAddress(short.newUserUrl.shortened)
 
-  // set users' 'most visited urls'
-  await
-    jennifer
-      .$query()
-      .patchAndFetch({
-        most_visited_url_id: youtube.id
-      })
-      .then((d) => {
-        console.log("jennifer's most visited set to youtube")
-      })
-      .catch((er) => {
-        console.log(er)
-      })
+  short = await github.getNewShortened()
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
 
-  await
-    alex
-      .$query()
-      .patchAndFetch({
-        most_visited_url_id: boardgamegeek.id
-      })
-      .then((d) => {
-        console.log("alex's most visited set to boardgamegeek")
-      })
-      .catch((er) => {
-        console.log(er)
-      })
+  // youtube
+  await jennifer.createUrl('www.youtube.com')
+  let youtube = await Url.query()
+           .where('address', 'www.youtube.com')
+           .then(arr => {
+              return arr[0]
+           })
+  short = await youtube.getNewShortened(beck)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
 
-  await
-    rohan
-      .$query()
-      .patchAndFetch({
-        most_visited_url_id: github.id
-      })
-      .then((d) => {
-        console.log("rohan's most visited set to github")
-      })
-      .catch((er) => {
-        console.log(er)
-      })
+  short = await youtube.getNewShortened(alex)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
 
-  await
-    eric
-      .$query()
-      .patchAndFetch({
-        most_visited_url_id: reddit.id
-      })
-      .then((d) => {
-        console.log("eric's most visited set to reddit")
-      })
-      .catch((er) => {
-        console.log(er)
-      })
+  await youtube.getNewShortened(rohan)
 
-  await
-    beck
-      .$query()
-      .patchAndFetch({
-        most_visited_url_id: homedepot.id
-      })
-      .then((d) => {
-        console.log("beck's most visited set to homedepot")
-      })
-      .catch((er) => {
-        console.log(er)
-      })
+  await jennifer.createUrl('stackoverflow.com')
+  let stackoverflow = await Url.query()
+           .where('address', 'stackoverflow.com')
+           .then(arr => {
+              return arr[0]
+           })
+  short = await stackoverflow.getNewShortened()
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+  short = await stackoverflow.getNewShortened()
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+  await eric.createUrl('www.reddit.com')
+  let reddit = await Url.query()
+           .where('address', 'www.reddit.com')
+           .then(arr => {
+              return arr[0]
+           })
+  short = await reddit.getNewShortened(rohan)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+  short = await reddit.getNewShortened()
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+
+  await alex.createUrl('www.boardgamegeek.com')
+  let boardgamegeek = await Url.query()
+           .where('address', 'www.boardgamegeek.com')
+           .then(arr => {
+              return arr[0]
+           })
+  short = await boardgamegeek.getNewShortened(beck)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+
+  await alex.createUrl('www.imdb.com')
+  let imdb = await Url.query()
+           .where('address', 'www.imdb.com')
+           .then(arr => {
+              return arr[0]
+           })
+  short = await imdb.getNewShortened(jennifer)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+  await beck.createUrl('www.homedepot.com')
+  let homedepot = await Url.query()
+           .where('address', 'www.homedepot.com')
+           .then(arr => {
+              return arr[0]
+           })
+  short = await homedepot.getNewShortened(jennifer)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+  await Url.create('www.newyorktimes.com')
+  let nyt = await Url.query()
+           .where('address', 'www.newyorktimes.com')
+           .then(arr => {
+              return arr[0]
+           })
+  short = await nyt.getNewShortened(jennifer)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+  await Url.create('www.craigslist.com')
+  let cr = await Url.query()
+         .where('address', 'www.craigslist.com')
+         .then(arr => {
+            return arr[0]
+         })
+  short = await cr.getNewShortened(jennifer)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+  await Url.create('www.wallstreetjournal.com')
+  let wsj = await Url.query()
+         .where('address', 'www.wallstreetjournal.com')
+         .then(arr => {
+            return arr[0]
+         })
+  short = await wsj.getNewShortened(jennifer)
+  await Url.getFullAddress(short.newUserUrl.shortened)
+
+  await Url.create('www.stopandshop.com')
+  await Url.create('www.1800flowers.com')
+  await Url.create('www.peapod.com')
+  await Url.create('www.lehighvalley.org')
 
 }
 

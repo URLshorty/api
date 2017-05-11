@@ -4,7 +4,7 @@
 #
 ## Overview
 
-Welcome to the **URLshorty API** at <https://url-shorty-api.herokuapp.com/>, a consumable API for URL shortening with optional user features.
+Welcome to the **URLshorty API** at <https://url-shorty-api.herokuapp.com/>, a publicly consumable, CORS-enabled API for URL shortening with optional user features.
 
 ## Table of Contents
 
