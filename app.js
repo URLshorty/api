@@ -348,10 +348,13 @@ router.post('/api/increment', async function (req, res) {
 router.get('/api/db', async function (req, res) {
   Promise.all([
       Url.query()
+         .orderBy('id', 'desc')
          .then(urls => ({URLS: urls})),
       User_Url.query()
+              .orderBy('id', 'desc')
               .then(user_urls => ({USER_URLS: user_urls})),
       User.query()
+          .orderBy('id', 'desc')
           .then(users => ({USERS: users})),
     ])
     .then(db => {
