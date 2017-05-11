@@ -4,7 +4,7 @@
 #
 ## Overview
 
-Welcome to the **URLshorty API** at <https://url-shorty-api.herokuapp.com/>, a publicly consumable, CORS-enabled API for URL shortening with optional user features.
+Welcome to the **URLshorty API** at <https://url5.herokuapp.com/>, a publicly consumable, CORS-enabled API for URL shortening with optional user features.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ Welcome to the **URLshorty API** at <https://url-shorty-api.herokuapp.com/>, a p
 
 A POST request sent to the following URL shortening endpoint:
 
-`https://url-shorty-api.herokuapp.com/api/urls?address=www.thisaddressistoolong.com`
+`https://url5.herokuapp.com/api/urls?address=www.thisaddressistoolong.com`
 
 Will receive the following JSON object:
 
@@ -51,7 +51,7 @@ The `url` key of the returned JSON object represents the *long-form URL* record.
 
 The `newUserUrl` key of the returned JSON object represents the *shortened version url* record. Its `shortened` key represents the alphanumeric string of its short form so that, according to the example response above, the long-form URL is now available at the following shortened form of the address:
 
-`https://url-shorty-api.herokuapp.com/000m`
+`https://url5.com/000m`
 
 URLshorty also supports features for logged in users with HTTPS connections. If a user had been logged in during the above example, then the `user_id` key in `newUserUrl` would be set to that user's ID. When there is no user logged in, like above, then the creator is considered anonymous and the `user_id` is set to `null`.
 
@@ -63,7 +63,7 @@ A `user_url` is a record representing each individual shortened version of a lon
 
 Additionally, to manually increment the total number of visits to a long-form URL, a POST request may be made to the increment endpoint:
 
-`https://url-shorty-api.herokuapp.com/api/increment?address=www.thisaddressistoolong.com`
+`https://url5.herokuapp.com/api/increment?address=www.thisaddressistoolong.com`
 
 This is so that links to the long-form address that are made directly from a frontend applications consuming the API can be tallied as a visit through the URLshorty community, for example the *Most Visited Links* score card at <https://url5horty.herokuapp.com/>
 
