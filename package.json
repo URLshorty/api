@@ -9,8 +9,8 @@
   "scripts": {
     "seed": "node -r babel-register -r babel-polyfill db/seeds/masterObjectSeeder.js",
     "test": "mocha",
-    "start": "NODE_ENV=production node -r babel-register -r babel-polyfill app.js",
-    "startD": "NODE_ENV=development nodemon --exec 'node -r babel-register -r babel-polyfill app.js'",
+    "start": "NODE_ENV=production node -r babel-register -r babel-polyfill -r newrelic app.js",
+    "startD": "NODE_ENV=development nodemon --exec 'node -r babel-register -r babel-polyfill -r newrelic app.js'",
     "setupEnv": "node config/setup.js",
     "co": "node -r babel-register -r babel-polyfill contextREPL.js",
     "cr": "nodemon --exec 'node -r babel-register -r babel-polyfill contextREPL.js'",
@@ -39,6 +39,7 @@
     "knex": "^0.12.7",
     "moment": "^2.17.1",
     "multer": "^1.3.0",
+    "newrelic": "^1.39.1",
     "objection": "^0.7.3",
     "pg": "^6.1.3"
   },
